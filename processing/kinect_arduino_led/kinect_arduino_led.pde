@@ -145,6 +145,7 @@ void onVisibleUser(SimpleOpenNI curContext, int userId)
 void controlServo(int userId, int jointType1, int jointType2) {
  PVector jointPos1 = new PVector();
  PVector jointPos2 = new PVector();
+ float text;
  
  text = context.getJointPosition(userId, jointType1, jointPos1);
  text = contect.getJointPosition(userId, jointType2, jointPos2);
