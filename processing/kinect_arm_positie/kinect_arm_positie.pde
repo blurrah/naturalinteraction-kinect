@@ -107,8 +107,8 @@ void drawSkeleton(int userId)
   context.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
  
   // Initiate text function
-  drawText(userId,SimpleOpenNI.SKEL_RIGHT_ELBOW,SimpleOpenNI.SKEL_RIGHT_HAND,SimpleOpenNI.SKEL_TORSO);
-  drawText(userId,SimpleOpenNI.SKEL_LEFT_ELBOW,SimpleOpenNI.SKEL_LEFT_HAND,SimpleOpenNI.SKEL_TORSO);
+  drawText(userId,SimpleOpenNI.SKEL_RIGHT_SHOULDER,SimpleOpenNI.SKEL_RIGHT_HAND,SimpleOpenNI.SKEL_TORSO);
+  drawText(userId,SimpleOpenNI.SKEL_LEFT_SHOULDER,SimpleOpenNI.SKEL_LEFT_HAND,SimpleOpenNI.SKEL_TORSO);
 }
 
 // -----------------------------------------------------------------
