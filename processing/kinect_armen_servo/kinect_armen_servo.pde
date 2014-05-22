@@ -181,7 +181,7 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
     } 
  } else if (X1 < X2) {
    if(Y1 > Y2) {
-      arduino.servoWrite(10, 0);  
+      arduino.servoWrite(10, 0);
     } else if (Y1 < Y2) {
     arduino.servoWrite(10, 90);
     } 
