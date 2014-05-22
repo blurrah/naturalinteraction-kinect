@@ -21,7 +21,7 @@ void setup()
 {
   
   println(Arduino.list());
-  arduino = new Arduino(this, "/dev/tty.usbmodemfd141", 57600);
+  arduino = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
   size(640,480);
   
   context = new SimpleOpenNI(this);
@@ -118,8 +118,8 @@ void drawSkeleton(int userId)
   context.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
   context.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);  
   
-  controlServo(userId, SimpleOpenNI.SKEL_RIGHT_HAND, SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
-  //controlServo(userId, SimpleOpenNI.SKEL_LEFT_HAND, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+  //controlServo(userId, SimpleOpenNI.SKEL_RIGHT_HAND, SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
+  controlServo(userId, SimpleOpenNI.SKEL_LEFT_HAND, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_SHOULDER);
 }
 
 // -----------------------------------------------------------------
@@ -157,6 +157,9 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  int Y2 = parseInt(jointPos2.y);
  int X1 = parseInt(jointPos1.x);
  int X2 = parseInt(jointPos3.x);
+ 
+ int xDiff = X1 - X2;
+ int yDiff = Y1 - Y2;
  
  /* OUDE CODE
  if(Y1 > Y2) {
