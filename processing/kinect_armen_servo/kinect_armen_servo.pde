@@ -186,20 +186,30 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
 */ 
  
 
- if(X1 > X2) {
+ if(xDiff > 150) {
     if(Y1 > Y2) {
       arduino1.servoWrite(11, 20); 
     } else if (Y1 < Y2) {
        arduino1.servoWrite(11, 90);
     }
     arduino1.servoWrite(10, 0);
- } else if (X1 < X2) {
+    arduino1.servoWrite(6, 0);
+ } else if (xDiff > -100 && xDiff < 100) {
    if(Y1 > Y2) {
       arduino1.servoWrite(10, 20);
     } else if (Y1 < Y2) {
     arduino1.servoWrite(10, 90);
     }
     arduino1.servoWrite(11, 0);
+    arduino1.servoWrite(6, 0);
+ } else if (xDiff < -100) {
+   if(Y1 > Y2) {
+      arduino1.servoWrite(6, 20);
+    } else if (Y1 < Y2) {
+    arduino1.servoWrite(6, 90);
+    }
+    arduino1.servoWrite(11, 0);
+    arduino1.servoWrite(10, 0);
  }
 }
 
