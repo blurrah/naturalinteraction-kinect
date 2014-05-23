@@ -4,15 +4,15 @@ import processing.serial.*;
 
 import cc.arduino.*;
 
-Arduino arduino;
+Arduino arduino1;
 
 SimpleOpenNI  context;
-color[]       userClr = new color[]{ color(255,0,0),
-                                     color(0,255,0),
-                                     color(0,0,255),
-                                     color(255,255,0),
-                                     color(255,0,255),
-                                     color(0,255,255)
+color[]       userClr = new color[]{ color(255,0,0,63),
+                                     color(0,255,0,63),
+                                     color(0,0,255,63),
+                                     color(255,255,0,63),
+                                     color(255,0,255,63),
+                                     color(0,255,255,63)
                                    };
 PVector com = new PVector();                                   
 PVector com2d = new PVector();                                   
@@ -21,7 +21,7 @@ void setup()
 {
   
   println(Arduino.list());
-  arduino = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
+  arduino1 = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
   size(640,480);
   
   context = new SimpleOpenNI(this);
@@ -44,8 +44,8 @@ void setup()
   strokeWeight(3);
   smooth(); 
  
- arduino.pinMode(11, Arduino.SERVO); 
- arduino.pinMode(10, Arduino.SERVO);
+ arduino1.pinMode(11, Arduino.SERVO); 
+ arduino1.pinMode(10, Arduino.SERVO);
 }
 
 void draw()
@@ -120,6 +120,10 @@ void drawSkeleton(int userId)
   
   //controlServo(userId, SimpleOpenNI.SKEL_RIGHT_HAND, SimpleOpenNI.SKEL_RIGHT_ELBOW, SimpleOpenNI.SKEL_RIGHT_SHOULDER);
   controlServo(userId, SimpleOpenNI.SKEL_LEFT_HAND, SimpleOpenNI.SKEL_LEFT_ELBOW, SimpleOpenNI.SKEL_LEFT_SHOULDER);
+  
+  // Initiate text function
+  drawText(userId,SimpleOpenNI.SKEL_RIGHT_ELBOW,SimpleOpenNI.SKEL_RIGHT_HAND,SimpleOpenNI.SKEL_TORSO);
+  drawText(userId,SimpleOpenNI.SKEL_LEFT_ELBOW,SimpleOpenNI.SKEL_LEFT_HAND,SimpleOpenNI.SKEL_TORSO);
 }
 
 // -----------------------------------------------------------------
@@ -175,19 +179,64 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
 
  if(X1 > X2) {
     if(Y1 > Y2) {
-      arduino.servoWrite(11, 0); 
+      arduino1.servoWrite(11, 0); 
     } else if (Y1 < Y2) {
-       arduino.servoWrite(11, 90);
+       arduino1.servoWrite(11, 90);
     } 
  } else if (X1 < X2) {
    if(Y1 > Y2) {
-      arduino.servoWrite(10, 0);
+      arduino1.servoWrite(10, 0);
     } else if (Y1 < Y2) {
-    arduino.servoWrite(10, 90);
+    arduino1.servoWrite(10, 90);
     } 
  }
 }
 
+// -----------------------------------------------------------------
+// Draw text and evaluate arm position
+
+void drawText(int userId,int jointType1,int jointType2,int jointCenter)
+{
+  PVector jointPos1 = new PVector();
+  PVector jointPos2 = new PVector();
+  PVector jointPos0 = new PVector();
+  float text;
+  
+  text = context.getJointPositionSkeleton(userId,jointType1,jointPos1); // userId vervangen door 1
+  text = context.getJointPositionSkeleton(userId,jointType2,jointPos2); // userId vervangen door 1
+  text = context.getJointPositionSkeleton(userId,jointCenter,jointPos0); // userId vervangen door 1
+  
+  int X1 = parseInt(jointPos1.x);
+  int Y1 = parseInt(jointPos1.y);
+  int Z1 = parseInt(jointPos1.z);
+  
+  int X2 = parseInt(jointPos2.x);
+  int Y2 = parseInt(jointPos2.y);
+  int Z2 = parseInt(jointPos2.z);
+  
+  int X0 = parseInt(jointPos0.x);
+  int Y0 = parseInt(jointPos0.y);
+  int Z0 = parseInt(jointPos0.z);
+  
+  int xDiff = X1 - X2;
+  int yDiff = Y1 - Y2;
+  int zDiff = Z1 - Z2;
+  
+  textSize(12);
+  fill(255);
+  
+  if(X1 > X0){
+    textAlign(LEFT);
+    text("X: " + xDiff, 10, 15);
+    text("Y: " + yDiff, 10, 30);
+    text("Z: " + zDiff, 10, 45);
+  } else if (X1 < X0){
+    textAlign(RIGHT);
+    text("X: " + xDiff, 630, 15);
+    text("Y: " + yDiff, 630, 30);
+    text("Z: " + zDiff, 630, 45);
+  }
+}
 
 void keyPressed()
 {
