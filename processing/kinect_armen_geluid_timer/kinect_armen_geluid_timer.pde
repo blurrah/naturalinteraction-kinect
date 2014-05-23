@@ -40,9 +40,9 @@ void setup()
   
   // Audio Baudio
   minim = new Minim(this);
-  player1 = minim.loadFile("box1.mp3");
-  player2 = minim.loadFile("corona.mp3");
-  player3 = minim.loadFile("box2.mp3");
+  player1 = minim.loadFile("box2.mp3");
+  player2 = minim.loadFile("box3.mp3");
+  player3 = minim.loadFile("box4.mp3");
   
   // Timer
   time = millis();
@@ -158,25 +158,16 @@ void onNewUser(SimpleOpenNI curContext, int userId)
   println("\tstart tracking skeleton");
   
   curContext.startTrackingSkeleton(userId);
-  resetPosition();
 }
 
 void onLostUser(SimpleOpenNI curContext, int userId)
 {
   println("onLostUser - userId: " + userId);
-  resetPosition();
 }
 
 void onVisibleUser(SimpleOpenNI curContext, int userId)
 {
   println("onVisibleUser - userId: " + userId);
-  resetPosition();
-}
-
-void resetPosition(){
-  arduino1.servoWrite(11, 0);
-  arduino1.servoWrite(10, 0);
-  arduino1.servoWrite(6, 0);
 }
 
 // -----------------------------------------------------------------
@@ -188,7 +179,7 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  PVector jointPos3 = new PVector();
  float text;
  
- text = context.getJointPositionSkeleton(userId, jointType1, jointPos1);
+ text = context.getJointPositionSkeleton(userId, jointType1, jointPos1); // userId naar 1
  text = context.getJointPositionSkeleton(userId, jointType2, jointPos2);
  text = context.getJointPositionSkeleton(userId, jointType3, jointPos3);
  
@@ -199,44 +190,62 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  int X2 = parseInt(jointPos3.x);
  int X3 = parseInt(jointPos3.y);
  
- int xDiff = X1 - X3;
- int yDiff = Y1 - Y2;
+ int xDiff = X1 - X2;
+ int yDiff = Y1 - Y3;
+ 
+ text("< User: " + userId, 15, X3 - 15);
+ text("     X: " + xDiff, 15, X3);
+ text("     Y: " + yDiff, 15, X3 + 15);
  
 
-  if(xDiff >= 150) {
-    if(yDiff >= 150) {
+  if(xDiff >= 300) {
+    arduino1.servoWrite(11, 90); // Links
+    arduino1.servoWrite(6, 0); // Midden
+    arduino1.servoWrite(10, 0); // Rechts
+    
+    audioPlay(0);
+    /*if(yDiff >= 100) {
       arduino1.servoWrite(11, 0); 
-    } else if (yDiff < 150) {
+    } else if (yDiff < 100) {
       arduino1.servoWrite(11, 90);
+      arduino1.servoWrite(10, 0);
+      arduino1.servoWrite(6, 0);
       if(tickPlayerThread1){
         audioPlay(0);
       }
-
-    }
-    arduino1.servoWrite(10, 0);
-    arduino1.servoWrite(6, 0);
-  } else if (xDiff > -150 && xDiff < 150) {
-    if(yDiff >= 150) {
+    }*/
+  } else if (xDiff > -300 && xDiff < 300) {
+    arduino1.servoWrite(11, 0); // Links
+    arduino1.servoWrite(6, 90); // Midden
+    arduino1.servoWrite(10, 0); // Rechts
+    
+    audioPlay(1);
+    /*if(yDiff >= 100) {
       arduino1.servoWrite(6, 0);
-    } else if (yDiff < 150) {
+    } else if (yDiff < 100) {
       arduino1.servoWrite(6, 90);
+      arduino1.servoWrite(11, 0);
+      arduino1.servoWrite(10, 0);
       if(tickPlayerThread2) {
         audioPlay(1);
       }
-    }
-    arduino1.servoWrite(11, 0);
-    arduino1.servoWrite(10, 0);
-  } else if (xDiff <= -150) {
-    if(yDiff >= 150) {
+    }*/
+  } else if (xDiff <= -300) {
+    arduino1.servoWrite(11, 0); // Links
+    arduino1.servoWrite(6, 0); // Midden
+    arduino1.servoWrite(10, 90); // Rechts
+    
+    audioPlay(2);
+    /*if(yDiff >= 200) {
       arduino1.servoWrite(10, 0);
-    } else if (yDiff < 150) {
+    } else if (yDiff < 100) {
       arduino1.servoWrite(10, 90);
+      arduino1.servoWrite(11, 0);
+      arduino1.servoWrite(6, 0);
       if(tickPlayerThread3) {
         audioPlay(2);
       }
-    }
-    arduino1.servoWrite(11, 0);
-    arduino1.servoWrite(6, 0);
+    }*/
   }
 }
 
@@ -263,8 +272,8 @@ void audioPlay(int player) {
   // misschien een parseInt
    player1.play();
    tickPlayerThread1 = false;
-   wait[0] = player1.length();
-   if (millis() - time >= wait[0]) {
+   //wait[0] = player1.length();
+   if (millis() - time >= player1.length()) {
     player1.rewind();
     tickPlayerThread1 = true;
    }
@@ -272,8 +281,8 @@ void audioPlay(int player) {
   case 1:
   player2.play();
   tickPlayerThread2 = false;
-  wait[1] = player2.length();
-    if(millis() - time >= wait[1]) {
+  
+    if(millis() - time >= player2.length()) {
        player2.rewind();
        tickPlayerThread2 = true;
     }
@@ -281,8 +290,8 @@ void audioPlay(int player) {
   case 2:
   player3.play();
   tickPlayerThread3 = false;
-  wait[2] = player3.length();
-    if(millis() - time >= wait[2]) {
+  
+    if(millis() - time >= player3.length()) {
       player3.rewind();
       tickPlayerThread3 = true;
     }

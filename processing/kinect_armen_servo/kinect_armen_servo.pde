@@ -247,12 +247,12 @@ void drawText(int userId,int jointType1,int jointType2,int jointCenter)
   textSize(12);
   fill(255);
   
-  if(X1 > X0){
+  if(X1 < X0){
     textAlign(LEFT);
     text("X: " + xDiff, 10, 15);
     text("Y: " + yDiff, 10, 30);
     text("Z: " + zDiff, 10, 45);
-  } else if (X1 < X0){
+  } else if (X1 > X0){
     textAlign(RIGHT);
     text("X: " + xDiff, 630, 15);
     text("Y: " + yDiff, 630, 30);
