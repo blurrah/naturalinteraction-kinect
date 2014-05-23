@@ -7,6 +7,7 @@ Arduino arduino1;
 Minim minim;
 AudioPlayer player1;
 AudioPlayer player2;
+AudioPlayer player3;
 
 SimpleOpenNI  context;
 color[]       userClr = new color[]{ color(255,0,0,63),
@@ -31,8 +32,9 @@ void setup()
   
   // Audio Baudio
   minim = new Minim(this);
-  player1 = minim.loadFile("corona.mp3");
-  player2 = minim.loadFile("inception.mp3");
+  player1 = minim.loadFile("box1.mp3");
+  player2 = minim.loadFile("corona.mp3");
+  player3 = minim.loadFile("box2.mp3");
   
   context = new SimpleOpenNI(this);
   if(context.isInit() == false)
@@ -56,6 +58,7 @@ void setup()
  
  arduino1.pinMode(11, Arduino.SERVO); 
  arduino1.pinMode(10, Arduino.SERVO);
+ arduino1.pinMode(6, Arduino.SERVO);
 }
 
 // -----------------------------------------------------------------
@@ -193,35 +196,37 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
 */ 
  
 
- if(xDiff >= 100) {
-    if(yDiff >= 100) {
+  if(xDiff >= 150) {
+    if(yDiff <= 75) {
       arduino1.servoWrite(11, 0); 
-    } else if (yDiff < 100) {
-       arduino1.servoWrite(11, 90);
-       player1.rewind();
-       player1.play();
+    } else if (yDiff > 75) {
+      arduino1.servoWrite(11, 90);
+      player1.rewind();
+      player1.play();
     }
     arduino1.servoWrite(10, 0);
     arduino1.servoWrite(6, 0);
- } else if (xDiff > -100 && xDiff < 100) {
-   if(yDiff >= 100) {
+  } else if (xDiff > -150 && xDiff < 150) {
+    if(yDiff <= 75) {
       arduino1.servoWrite(10, 0);
-    } else if (yDiff < 100) {
+    } else if (yDiff > 75) {
       arduino1.servoWrite(10, 90);
       player2.rewind();
       player2.play();
     }
     arduino1.servoWrite(11, 0);
     arduino1.servoWrite(6, 0);
- } else if (xDiff <= -100) {
-   if(yDiff >= 100) {
+  } else if (xDiff <= -150) {
+    if(yDiff <= 75) {
       arduino1.servoWrite(6, 0);
-    } else if (yDiff < 100) {
-    arduino1.servoWrite(6, 90);
+    } else if (yDiff > 75) {
+      arduino1.servoWrite(6, 90);
+      player3.rewind();
+      player3.play();
     }
     arduino1.servoWrite(11, 0);
     arduino1.servoWrite(10, 0);
- }
+  }
 }
 
 // -----------------------------------------------------------------
