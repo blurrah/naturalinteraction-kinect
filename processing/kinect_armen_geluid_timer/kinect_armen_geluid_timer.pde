@@ -12,6 +12,11 @@ AudioPlayer player3;
 // time functie
 int time;
 
+ // Timer
+ boolean tickPlayerThread1 = true;
+ boolean tickPlayerThread2 = true;
+ boolean tickPlayerThread3 = true;
+
 
 SimpleOpenNI  context;
 color[]       userClr = new color[]{ color(73,10,61),
@@ -183,11 +188,6 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  PVector jointPos3 = new PVector();
  float text;
  
- // Timer
- boolean tickPlayerThread1;
- boolean tickPlayerThread2;
- boolean tickPlayerThread3;
- 
  text = context.getJointPositionSkeleton(userId, jointType1, jointPos1);
  text = context.getJointPositionSkeleton(userId, jointType2, jointPos2);
  text = context.getJointPositionSkeleton(userId, jointType3, jointPos3);
@@ -259,7 +259,7 @@ void audioPlay(int player) {
   int wait[];
   
   switch(player) {
-    case "0":
+    case 0:
   // misschien een parseInt
    player1.play();
    tickPlayerThread1 = false;
@@ -269,7 +269,7 @@ void audioPlay(int player) {
     tickPlayerThread1 = true;
    }
   break;
-  case "1":
+  case 1:
   player2.play();
   tickPlayerThread2 = false;
   wait[1] = player2.length();
@@ -278,7 +278,7 @@ void audioPlay(int player) {
        tickPlayerThread2 = true;
     }
   break;
-  case "2":
+  case 2:
   player3.play();
   tickPlayerThread3 = false;
   wait[2] = player3.length();
