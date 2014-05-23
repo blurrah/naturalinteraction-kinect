@@ -194,9 +194,9 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  
 
  if(xDiff >= 100) {
-    if(Y1 > Y2) {
+    if(yDiff >= 100) {
       arduino1.servoWrite(11, 0); 
-    } else if (Y1 < Y2) {
+    } else if (yDiff < 100) {
        arduino1.servoWrite(11, 90);
        player1.rewind();
        player1.play();
@@ -204,9 +204,9 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
     arduino1.servoWrite(10, 0);
     arduino1.servoWrite(6, 0);
  } else if (xDiff > -100 && xDiff < 100) {
-   if(Y1 > Y2) {
+   if(yDiff >= 100) {
       arduino1.servoWrite(10, 0);
-    } else if (Y1 < Y2) {
+    } else if (yDiff < 100) {
       arduino1.servoWrite(10, 90);
       player2.rewind();
       player2.play();
@@ -214,9 +214,9 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
     arduino1.servoWrite(11, 0);
     arduino1.servoWrite(6, 0);
  } else if (xDiff <= -100) {
-   if(Y1 > Y2) {
+   if(yDiff >= 100) {
       arduino1.servoWrite(6, 0);
-    } else if (Y1 < Y2) {
+    } else if (yDiff < 100) {
     arduino1.servoWrite(6, 90);
     }
     arduino1.servoWrite(11, 0);
