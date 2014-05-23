@@ -17,6 +17,9 @@ color[]       userClr = new color[]{ color(255,0,0,63),
 PVector com = new PVector();                                   
 PVector com2d = new PVector();                                   
 
+// -----------------------------------------------------------------
+// Setup function
+
 void setup()
 {
   
@@ -47,6 +50,9 @@ void setup()
  arduino1.pinMode(11, Arduino.SERVO); 
  arduino1.pinMode(10, Arduino.SERVO);
 }
+
+// -----------------------------------------------------------------
+// Draw function
 
 void draw()
 {
@@ -147,6 +153,9 @@ void onVisibleUser(SimpleOpenNI curContext, int userId)
   //println("onVisibleUser - userId: " + userId);
 }
 
+// -----------------------------------------------------------------
+// Control Servo
+
 void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  PVector jointPos1 = new PVector();
  PVector jointPos2 = new PVector();
@@ -179,16 +188,18 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
 
  if(X1 > X2) {
     if(Y1 > Y2) {
-      arduino1.servoWrite(11, 0); 
+      arduino1.servoWrite(11, 20); 
     } else if (Y1 < Y2) {
        arduino1.servoWrite(11, 90);
-    } 
+    }
+    arduino1.servoWrite(10, 0);
  } else if (X1 < X2) {
    if(Y1 > Y2) {
-      arduino1.servoWrite(10, 0);
+      arduino1.servoWrite(10, 20);
     } else if (Y1 < Y2) {
     arduino1.servoWrite(10, 90);
-    } 
+    }
+    arduino1.servoWrite(11, 0);
  }
 }
 
@@ -237,6 +248,9 @@ void drawText(int userId,int jointType1,int jointType2,int jointCenter)
     text("Z: " + zDiff, 630, 45);
   }
 }
+
+// -----------------------------------------------------------------
+// Keypresses
 
 void keyPressed()
 {
