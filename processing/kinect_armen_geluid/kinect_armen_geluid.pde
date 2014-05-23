@@ -10,12 +10,11 @@ AudioPlayer player2;
 AudioPlayer player3;
 
 SimpleOpenNI  context;
-color[]       userClr = new color[]{ color(255,0,0,63),
-                                     color(0,255,0,63),
-                                     color(0,0,255,63),
-                                     color(255,255,0,63),
-                                     color(255,0,255,63),
-                                     color(0,255,255,63)
+color[]       userClr = new color[]{ color(73,10,61),
+                                     color(189,21,80),
+                                     color(233,127,2),
+                                     color(248,202,0),
+                                     color(138,155,15)
                                    };
 PVector com = new PVector();                                   
 PVector com2d = new PVector();                                   
@@ -151,16 +150,25 @@ void onNewUser(SimpleOpenNI curContext, int userId)
   println("\tstart tracking skeleton");
   
   curContext.startTrackingSkeleton(userId);
+  resetPosition();
 }
 
 void onLostUser(SimpleOpenNI curContext, int userId)
 {
   println("onLostUser - userId: " + userId);
+  resetPosition();
 }
 
 void onVisibleUser(SimpleOpenNI curContext, int userId)
 {
-  //println("onVisibleUser - userId: " + userId);
+  println("onVisibleUser - userId: " + userId);
+  resetPosition();
+}
+
+void resetPosition(){
+  arduino1.servoWrite(11, 0);
+  arduino1.servoWrite(10, 0);
+  arduino1.servoWrite(6, 0);
 }
 
 // -----------------------------------------------------------------
@@ -197,9 +205,9 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  
 
   if(xDiff >= 150) {
-    if(yDiff <= 75) {
+    if(yDiff >= 150) {
       arduino1.servoWrite(11, 0); 
-    } else if (yDiff > 75) {
+    } else if (yDiff < 150) {
       arduino1.servoWrite(11, 90);
       player1.rewind();
       player1.play();
@@ -207,25 +215,25 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
     arduino1.servoWrite(10, 0);
     arduino1.servoWrite(6, 0);
   } else if (xDiff > -150 && xDiff < 150) {
-    if(yDiff <= 75) {
-      arduino1.servoWrite(10, 0);
-    } else if (yDiff > 75) {
-      arduino1.servoWrite(10, 90);
+    if(yDiff >= 150) {
+      arduino1.servoWrite(6, 0);
+    } else if (yDiff < 150) {
+      arduino1.servoWrite(6, 90);
       player2.rewind();
       player2.play();
     }
     arduino1.servoWrite(11, 0);
-    arduino1.servoWrite(6, 0);
+    arduino1.servoWrite(10, 0);
   } else if (xDiff <= -150) {
-    if(yDiff <= 75) {
-      arduino1.servoWrite(6, 0);
-    } else if (yDiff > 75) {
-      arduino1.servoWrite(6, 90);
+    if(yDiff >= 150) {
+      arduino1.servoWrite(10, 0);
+    } else if (yDiff < 150) {
+      arduino1.servoWrite(10, 90);
       player3.rewind();
       player3.play();
     }
     arduino1.servoWrite(11, 0);
-    arduino1.servoWrite(10, 0);
+    arduino1.servoWrite(6, 0);
   }
 }
 
