@@ -81,17 +81,11 @@ void draw() {
 
     if (context.getCoM(userList[i], com)) {
       context.convertRealWorldToProjective(com, com2d);
-      stroke(100, 255, 0);
-      strokeWeight(1);
-      beginShape(LINES);
-      vertex(com2d.x, com2d.y - 5);
-      vertex(com2d.x, com2d.y + 5);
-      vertex(com2d.x - 5, com2d.y);
-      vertex(com2d.x + 5, com2d.y);
-      endShape();
-
+      
       fill(255, 255, 255);
       text(Integer.toString(userList[i]), com2d.x, com2d.y);
+      
+      takeDirection(userList[i]);
     }
   }
 }
@@ -99,6 +93,9 @@ void draw() {
 /* Take direction function
  ================================================== */
 void takeDirection(int userId) {
+  fill(255, 255, 255);
+  textSize(14);
+  
   PVector leftHand = new PVector();
   PVector leftElbow = new PVector();
   PVector leftShoulder = new PVector();
@@ -134,10 +131,22 @@ void takeDirection(int userId) {
   int leftElbowY = parseInt(leftElbow.y);
   int leftShoulderX = parseInt(leftShoulder.x);
   
+  int leftHorizontal = round((leftHandX - leftShoulderX) / 100);
+  int leftVertical = round((leftHandY - leftElbowY) / 100);
+  textAlign(RIGHT);
+  text("X: " + leftHorizontal, com2d.x - 64, com2d.y);
+  text("Y: " + leftVertical, com2d.x - 64, com2d.y + 15);
+  
   int rightHandX = parseInt(rightHand.x);
   int rightHandY = parseInt(rightHand.y);
   int rightElbowY = parseInt(rightElbow.y);
   int rightShoulderX = parseInt(rightShoulder.x);
+  
+  int rightHorizontal = round((rightHandX - rightShoulderX) / 100);
+  int rightVertical = round((rightHandY - rightElbowY) / 100);
+  textAlign(LEFT);
+  text("X: " + rightHorizontal, com2d.x + 64, com2d.y);
+  text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
 }
 
 /* Draw skeleton functie
