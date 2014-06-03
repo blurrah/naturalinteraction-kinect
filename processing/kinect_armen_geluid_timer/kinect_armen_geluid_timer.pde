@@ -35,7 +35,7 @@ void setup()
 {
   
   println(Arduino.list());
-  arduino1 = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
+  arduino1 = new Arduino(this, "/dev/tty.usbmodemfd141", 57600);
   size(640,480);
   
   // Audio Baudio
@@ -190,7 +190,7 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  int X2 = parseInt(jointPos3.x);
  int X3 = parseInt(jointPos3.y);
  
- int xDiff = X1 - X2;
+ int xDiff = X1 - X3;
  int yDiff = Y1 - Y3;
  
  text("< User: " + userId, 15, X3 - 15);
@@ -198,7 +198,7 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
  text("     Y: " + yDiff, 15, X3 + 15);
  
 
-  if(xDiff >= 300) {
+  if(xDiff >= 250) {
     arduino1.servoWrite(11, 90); // Links
     arduino1.servoWrite(6, 0); // Midden
     arduino1.servoWrite(10, 0); // Rechts
@@ -214,7 +214,7 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
         audioPlay(0);
       }
     }*/
-  } else if (xDiff > -300 && xDiff < 300) {
+  } else if (xDiff > -500 && xDiff < 250) {
     arduino1.servoWrite(11, 0); // Links
     arduino1.servoWrite(6, 90); // Midden
     arduino1.servoWrite(10, 0); // Rechts
@@ -230,7 +230,7 @@ void controlServo(int userId, int jointType1, int jointType2, int jointType3) {
         audioPlay(1);
       }
     }*/
-  } else if (xDiff <= -300) {
+  } else if (xDiff <= -500) {
     arduino1.servoWrite(11, 0); // Links
     arduino1.servoWrite(6, 0); // Midden
     arduino1.servoWrite(10, 90); // Rechts
