@@ -13,7 +13,7 @@ AudioPlayer player1;
 AudioPlayer player2;
 AudioPlayer player3;
 
-/* Constante variabelen
+/* Variabelen
  ================================================== */
 boolean tickPlayerThread1 = true;
 boolean tickPlayerThread2 = true;
@@ -29,8 +29,6 @@ color[] userClr = new color[] {
 PVector com = new PVector();                                   
 PVector com2d = new PVector();  
 
-/* Niet constante variabelen
- ================================================== */
 int time;
 
 /* Setup functie
@@ -46,7 +44,7 @@ void setup() {
   time = millis();
 
   // Arduino configuration
-  //arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
+  arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
 
   // Audio configuration
   minim = new Minim(this);
@@ -81,10 +79,10 @@ void draw() {
 
     if (context.getCoM(userList[i], com)) {
       context.convertRealWorldToProjective(com, com2d);
-      
+
       fill(255, 255, 255);
       text(Integer.toString(userList[i]), com2d.x, com2d.y);
-      
+
       takeDirection(userList[i]);
     }
   }
@@ -95,58 +93,167 @@ void draw() {
 void takeDirection(int userId) {
   fill(255, 255, 255);
   textSize(14);
-  
+
   PVector leftHand = new PVector();
   PVector leftElbow = new PVector();
   PVector leftShoulder = new PVector();
   PVector rightHand = new PVector();
   PVector rightElbow = new PVector();
   PVector rightShoulder = new PVector();
-  
-  context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_HAND,leftHand);
-  context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_ELBOW,leftElbow);
-  context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_SHOULDER,leftShoulder);
-  context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_HAND,rightHand);
-  context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_ELBOW,rightElbow);
-  context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_SHOULDER,rightShoulder);
-  
+
+  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);
+  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, leftElbow);
+  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, leftShoulder);
+  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
+  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, rightElbow);
+  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, rightShoulder);
+
   /*
      * Serial mapping stuff
-     -1  Niks
-     0   ServoA HIGH
-     1   ServoA LOW
-     2   ServoB HIGH
-     3   ServoB LOW
-     4   rfA    HIGH
-     5   rfA    LOW
-     6   rfB    HIGH
-     7   rfB    LOW
-     8   rfC    HIGH
-     9   rfC    LOW
+   -1  Niks
+   0   ServoA HIGH
+   1   ServoA LOW
+   2   ServoB HIGH
+   3   ServoB LOW
+   4   rfA    HIGH
+   5   rfA    LOW
+   6   rfB    HIGH
+   7   rfB    LOW
+   8   rfC    HIGH
+   9   rfC    LOW
    */
-  
+
   // Start defining variables
   int leftHandX = parseInt(leftHand.x);
   int leftHandY = parseInt(leftHand.y);
   int leftElbowY = parseInt(leftElbow.y);
   int leftShoulderX = parseInt(leftShoulder.x);
-  
+
   int leftHorizontal = round((leftHandX - leftShoulderX) / 100);
   int leftVertical = round((leftHandY - leftElbowY) / 100);
   textAlign(RIGHT);
   text("X: " + leftHorizontal, com2d.x - 64, com2d.y);
   text("Y: " + leftVertical, com2d.x - 64, com2d.y + 15);
-  
+
   int rightHandX = parseInt(rightHand.x);
   int rightHandY = parseInt(rightHand.y);
   int rightElbowY = parseInt(rightElbow.y);
   int rightShoulderX = parseInt(rightShoulder.x);
-  
+
   int rightHorizontal = round((rightHandX - rightShoulderX) / 100);
   int rightVertical = round((rightHandY - rightElbowY) / 100);
   textAlign(LEFT);
   text("X: " + rightHorizontal, com2d.x + 64, com2d.y);
   text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
+
+  sendHValue(leftHorizontal, 0);
+  sendHValue(rightHorizontal, 1);
+  sendVValue(leftVertical, 0);
+  sendVValue(rightVertical, 1);
+}
+
+/* Send horizontal value function
+ ================================================== */
+void sendHValue(int x, int y) {
+  if (y == 0) {
+    switch(x) {
+    case -4:
+    case -3: 
+      arduinoPort.write('A');
+      break;
+    case -2: 
+      arduinoPort.write('B');
+      break;
+    case -1: 
+      arduinoPort.write('C');
+      break;
+    case 0: 
+      arduinoPort.write('D');
+      break;
+    case 1: 
+      arduinoPort.write('E');
+      break;
+    case 2: 
+      arduinoPort.write('F');
+      break;
+    case 3: 
+    case 4: 
+      arduinoPort.write('G');
+      break;
+    }
+  } else if (y == 1) {
+    switch(x) {
+    case -4:
+    case -3: 
+      arduinoPort.write('H');
+      break;
+    case -2: 
+      arduinoPort.write('I');
+      break;
+    case -1: 
+      arduinoPort.write('J');
+      break;
+    case 0: 
+      arduinoPort.write('K');
+      break;
+    case 1: 
+      arduinoPort.write('L');
+      break;
+    case 2: 
+      arduinoPort.write('M');
+      break;
+    case 3: 
+    case 4: 
+      arduinoPort.write('N');
+      break;
+    }
+  }
+}
+
+/* Send vertical value function
+ ================================================== */
+void sendVValue(int x, int y) {
+  if (y == 0) {
+    switch(x) {
+    case -3:
+    case -2: 
+      arduinoPort.write('0');
+      break;
+    case -1: 
+      arduinoPort.write('1');
+      break;
+    case 0: 
+      arduinoPort.write('2');
+      break;
+    case 1: 
+      arduinoPort.write('3');
+      break;
+    case 2: 
+    case 3: 
+      arduinoPort.write('4');
+      break;
+    }
+  } else if (y == 1) {
+    switch(x) {
+    case -3:
+    case -2: 
+      arduinoPort.write('5');
+      break;
+    case -1: 
+      arduinoPort.write('6');
+      break;
+    case 0: 
+      arduinoPort.write('7');
+      break;
+    case 1: 
+      arduinoPort.write('8');
+      break;
+    case 2: 
+    case 3: 
+      arduinoPort.write('9');
+      break;
+    }
+  }
 }
 
 /* Draw skeleton functie
@@ -155,9 +262,9 @@ void drawSkeleton(int userId) {
   // to get the 3d joint data
   /*
     PVector jointPos = new PVector();
-    context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_NECK,jointPos);
-    println(jointPos);
-  */
+   context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_NECK,jointPos);
+   println(jointPos);
+   */
 
   context.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
 
