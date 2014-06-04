@@ -31,19 +31,6 @@ PVector com2d = new PVector();
 
 int time;
 
-/* Definities
- ================================================== */
-#define ServoAHigh 0
-#define ServoALow 1
-#define ServoBHigh 2
-#define ServoBLow 3
-#define rfAHigh 4
-#define rfALow 5
-#define rfBHigh 6
-#define rfBLow 7
-#define rfCHigh 8
-#define rfCLow 9
-
 /* Setup functie
  ================================================== */
 void setup() {
