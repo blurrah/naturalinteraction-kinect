@@ -20,7 +20,7 @@
 
 
 // Seriele shit
-int serialVal;
+char serialVal;
 
 /*
  * Serial mapping stuff
@@ -103,9 +103,14 @@ void sendSignalToRC(int x, boolean y) {
 
 void loop() {
   if(Serial.available()) {
+<<<<<<< HEAD
     serialVal = Serial.read() -'0';
     Serial.print("I received: ");
     Serial.println(serialVal, DEC);
+=======
+    serialVal = Serial.read()-'0';
+    println(serialVal);
+>>>>>>> FETCH_HEAD
   }
 
   switch(serialVal) {
