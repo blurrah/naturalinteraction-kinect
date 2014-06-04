@@ -94,6 +94,10 @@ void draw() {
   }
 }
 
+int defineUser(){
+  i = userList.length;
+}
+
 /* Take direction function
  ================================================== */
 void takeDirection(int userId) {
