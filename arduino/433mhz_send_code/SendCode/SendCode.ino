@@ -37,7 +37,7 @@ void loop() {
   sendSignalTo(3, true);
   delay(1000);
   sendSignalTo(3, false);
-  delay(1000);
+  delay(1000);fit
 }
 
 /*
