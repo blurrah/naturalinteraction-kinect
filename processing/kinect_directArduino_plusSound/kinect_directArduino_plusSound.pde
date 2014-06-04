@@ -12,12 +12,16 @@ Minim minim;
 AudioPlayer player1;
 AudioPlayer player2;
 AudioPlayer player3;
+AudioPlayer player4;
+AudioPlayer player5;
 
 /* Variabelen
  ================================================== */
 boolean tickPlayerThread1 = true;
 boolean tickPlayerThread2 = true;
 boolean tickPlayerThread3 = true;
+boolean tickPlayerThread4 = true;
+boolean tickPlayerThread5 = true;
 
 color[] userClr = new color[] { 
   color(255, 0, 0), 
@@ -51,6 +55,8 @@ void setup() {
   player1 = minim.loadFile("box2.mp3");
   player2 = minim.loadFile("box3.mp3");
   player3 = minim.loadFile("box4.mp3");
+  player4 = minim.loadFile("box4.mp3");
+  player5 = minim.loadFile("box4.mp3");
 
   // Kinect configuration
   context = new SimpleOpenNI(this);
@@ -146,6 +152,8 @@ void takeDirection(int userId) {
   text("X: " + rightHorizontal, com2d.x + 64, com2d.y);
   text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
 
+  text("Z: " + com2d.z, com2d.x, com2d.y + 15);
+
   sendHValue(leftHorizontal);
   sendHValue(rightHorizontal);
 }
@@ -156,28 +164,37 @@ void sendHValue(int x) {
   switch(x) {
   case -4:
   case -3: 
-    arduinoPort.write('A');
-    break;
+    arduinoPort.write(0);
+    if (tickPlayerThread1) {
+      audioPlay(0);
+    }
     break;
   case -2: 
-    arduinoPort.write('B');
-    break;
   case -1: 
-    arduinoPort.write('C');
+    arduinoPort.write(2);
+    if (tickPlayerThread2) {
+      audioPlay(1);
+    }
     break;
   case 0: 
-    arduinoPort.write('D');
+    arduinoPort.write(4);
+    if (tickPlayerThread3) {
+      audioPlay(2);
+    }
     break;
   case 1: 
-    arduinoPort.write('E');
-    break;
   case 2: 
-    arduinoPort.write('F');
+    arduinoPort.write(6);
+    if (tickPlayerThread4) {
+      audioPlay(3);
+    }
     break;
   case 3: 
   case 4: 
-    arduinoPort.write('G');
-    break;
+    arduinoPort.write(8);
+    if (tickPlayerThread5) {
+      audioPlay(4);
+    }
     break;
   }
 }
@@ -185,13 +202,6 @@ void sendHValue(int x) {
 /* Draw skeleton functie
  ================================================== */
 void drawSkeleton(int userId) {
-  // to get the 3d joint data
-  /*
-    PVector jointPos = new PVector();
-   context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_NECK,jointPos);
-   println(jointPos);
-   */
-
   context.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
 
   context.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
@@ -246,6 +256,24 @@ void audioPlay(int player) {
     if (millis() - time >= player3.length()) {
       player3.rewind();
       tickPlayerThread3 = true;
+    }
+    break;
+  case 3:
+    player4.play();
+    tickPlayerThread4 = false;
+
+    if (millis() - time >= player4.length()) {
+      player4.rewind();
+      tickPlayerThread4 = true;
+    }
+    break;
+  case 4:
+    player5.play();
+    tickPlayerThread5 = false;
+
+    if (millis() - time >= player5.length()) {
+      player5.rewind();
+      tickPlayerThread5 = true;
     }
     break;
   };
