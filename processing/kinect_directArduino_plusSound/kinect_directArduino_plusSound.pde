@@ -173,9 +173,9 @@ void takeDirection(int userId) {
 
   text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
   
-  if(leftVertical > rightVertical){
+  if(leftVertical > rightVertical && leftVertical > -1){
     sendHValue(leftHorizontal);
-  }else{
+  }else if(rightVertical > leftVertical && rightVertical > -1){
     sendHValue(rightHorizontal);
   }
 }
