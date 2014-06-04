@@ -54,11 +54,11 @@ void setup() {
 
   // Audio configuration
   minim = new Minim(this);
-  player1 = minim.loadFile("box2.mp3"); // Case 0 Doos
-  player2 = minim.loadFile("box3.mp3"); // Case 2 Prullenbak
-  player3 = minim.loadFile("box4.mp3"); // Case 4 RF A Televisie
-  player4 = minim.loadFile("box4.mp3"); // Case 6 RF B Blender
-  player5 = minim.loadFile("box4.mp3"); // Case 8 RF C Platenspeler
+  player1 = minim.loadFile("doos.wav"); // Case 0 Doos
+  player2 = minim.loadFile("platenspeler.wav"); // Case 2 Prullenbak
+  player3 = minim.loadFile("tv.mp3"); // Case 4 RF A Televisie
+  player4 = minim.loadFile("doos.wav"); // Case 6 RF B Blender
+  player5 = minim.loadFile("platenspeler.wav"); // Case 8 RF C Platenspeler
 
   // Kinect configuration
   context = new SimpleOpenNI(this);
