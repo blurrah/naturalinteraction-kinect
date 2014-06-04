@@ -12,12 +12,16 @@ Minim minim;
 AudioPlayer player1;
 AudioPlayer player2;
 AudioPlayer player3;
+AudioPlayer player4;
+AudioPlayer player5;
 
 /* Variabelen
  ================================================== */
 boolean tickPlayerThread1 = true;
 boolean tickPlayerThread2 = true;
 boolean tickPlayerThread3 = true;
+boolean tickPlayerThread4 = true;
+boolean tickPlayerThread5 = true;
 
 color[] userClr = new color[] { 
   color(255, 0, 0), 
@@ -30,6 +34,8 @@ PVector com = new PVector();
 PVector com2d = new PVector();  
 
 int time;
+int[] zValue = new int[6];
+int activeUser = 0;
 
 /* Setup functie
  ================================================== */
@@ -48,9 +54,11 @@ void setup() {
 
   // Audio configuration
   minim = new Minim(this);
-  player1 = minim.loadFile("box2.mp3");
-  player2 = minim.loadFile("box3.mp3");
-  player3 = minim.loadFile("box4.mp3");
+  player1 = minim.loadFile("doos.wav"); // Case 0 Doos
+  player2 = minim.loadFile("platenspeler.wav"); // Case 2 Prullenbak
+  player3 = minim.loadFile("tv.mp3"); // Case 4 RF A Televisie
+  player4 = minim.loadFile("doos.wav"); // Case 6 RF B Blender
+  player5 = minim.loadFile("platenspeler.wav"); // Case 8 RF C Platenspeler
 
   // Kinect configuration
   context = new SimpleOpenNI(this);
@@ -83,7 +91,24 @@ void draw() {
       fill(255, 255, 255);
       text(Integer.toString(userList[i]), com2d.x, com2d.y);
 
-      takeDirection(userList[i]);
+      zValue[i] = int(com2d.z);
+
+      if (zValue.length > 0) {
+        int MIN = MAX_INT; 
+        int index = 0;
+
+        for (int o=0; o < zValue.length; o++) { 
+          if (zValue[o]<MIN && zValue[o] != 0.0) { 
+            MIN=zValue[o]; 
+            index = o;
+            activeUser = index + 1;
+          }
+        } 
+
+        println("Primary user: " + activeUser);
+      }
+
+      takeDirection(activeUser);
     }
   }
 }
@@ -146,6 +171,8 @@ void takeDirection(int userId) {
   text("X: " + rightHorizontal, com2d.x + 64, com2d.y);
   text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
 
+  text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
+
   sendHValue(leftHorizontal);
   sendHValue(rightHorizontal);
 }
@@ -156,28 +183,37 @@ void sendHValue(int x) {
   switch(x) {
   case -4:
   case -3: 
-    arduinoPort.write('A');
-    break;
+    arduinoPort.write(0); // Case 0 Doos (PT 11)
+    if (tickPlayerThread1) {
+      audioPlay(0);
+    }
     break;
   case -2: 
-    arduinoPort.write('B');
-    break;
   case -1: 
-    arduinoPort.write('C');
+    arduinoPort.write(2); // Case 2 Prullenbak (PT 10)
+    if (tickPlayerThread2) {
+      audioPlay(1);
+    }
     break;
   case 0: 
-    arduinoPort.write('D');
+    arduinoPort.write(4); // Case 4 Televisie (RF A)
+    if (tickPlayerThread3) {
+      audioPlay(2);
+    }
     break;
   case 1: 
-    arduinoPort.write('E');
-    break;
   case 2: 
-    arduinoPort.write('F');
+    arduinoPort.write(6); // Case 6 Blender (RF B)
+    if (tickPlayerThread4) {
+      audioPlay(3);
+    }
     break;
   case 3: 
   case 4: 
-    arduinoPort.write('G');
-    break;
+    arduinoPort.write(8); // Case 8 Platenspeler (RF C)
+    if (tickPlayerThread5) {
+      audioPlay(4);
+    }
     break;
   }
 }
@@ -185,13 +221,6 @@ void sendHValue(int x) {
 /* Draw skeleton functie
  ================================================== */
 void drawSkeleton(int userId) {
-  // to get the 3d joint data
-  /*
-    PVector jointPos = new PVector();
-   context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_NECK,jointPos);
-   println(jointPos);
-   */
-
   context.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
 
   context.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
@@ -246,6 +275,24 @@ void audioPlay(int player) {
     if (millis() - time >= player3.length()) {
       player3.rewind();
       tickPlayerThread3 = true;
+    }
+    break;
+  case 3:
+    player4.play();
+    tickPlayerThread4 = false;
+
+    if (millis() - time >= player4.length()) {
+      player4.rewind();
+      tickPlayerThread4 = true;
+    }
+    break;
+  case 4:
+    player5.play();
+    tickPlayerThread5 = false;
+
+    if (millis() - time >= player5.length()) {
+      player5.rewind();
+      tickPlayerThread5 = true;
     }
     break;
   };
