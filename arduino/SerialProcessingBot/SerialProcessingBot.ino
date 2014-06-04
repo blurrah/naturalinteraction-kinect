@@ -103,15 +103,9 @@ void sendSignalToRC(int x, boolean y) {
 
 void loop() {
   if(Serial.available()) {
-<<<<<<< HEAD
-    serialVal = Serial.read()-'0';
-    print("I received: ");
-    println(serialVal, DEC);
-=======
-    serialVal = Serial.read();
+    serialVal = Serial.read() -'0';
     Serial.print("I received: ");
     Serial.println(serialVal, DEC);
->>>>>>> FETCH_HEAD
   }
 
   switch(serialVal) {
