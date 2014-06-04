@@ -187,6 +187,7 @@ void sendHValue(int x) {
   case -4:
   case -3: 
     arduinoPort.write(0); // Case 0 Doos (PT 11)
+    println("DOOS");
     if (tickPlayerThread1) {
       audioPlay(0);
     }
@@ -194,6 +195,7 @@ void sendHValue(int x) {
   case -2: 
   case -1: 
     arduinoPort.write(2); // Case 2 Prullenbak (PT 10)
+    println("PRULLENBAK");
     if (tickPlayerThread2) {
       audioPlay(1);
     }

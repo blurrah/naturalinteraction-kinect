@@ -20,7 +20,7 @@
 
 
 // Seriele shit
-char serialVal;
+int serialVal;
 
 /*
  * Serial mapping stuff
@@ -102,15 +102,18 @@ void sendSignalToRC(int x, boolean y) {
 
 
 void loop() {
-  if(Serial.available()) {
-    serialVal = Serial.read()-'0';
+  if(Serial.available() > 0) {
+    serialVal = Serial.read();
     Serial.println(serialVal);
+    delay(10);
+    //serialVal = binary2decimal(serialVal);
+    
   }
 
   switch(serialVal) {
   case -1:
     break;
-  case 0:
+  case 65:
     // Servo A HIGH
     servoA.write(90);
     disableAllBut(0);
@@ -119,7 +122,7 @@ void loop() {
     // Servo A LOW
     servoA.write(0);
     break;
-  case 2:
+  case 66:
     // Servo B HIGH
     servoB.write(90);
     disableAllBut(2);
@@ -128,7 +131,7 @@ void loop() {
     // Servo B LOW
     servoB.write(0);
     break;
-  case 4:
+  case 67:
     // RF A HIGH
     sendSignalToRC(1, true);
     disableAllBut(4);
@@ -137,7 +140,7 @@ void loop() {
     // RF A LOW
     sendSignalToRC(1, false);
     break;
-  case 6:
+  case 68:
     // RF B HIGH
     sendSignalToRC(2, true);
     disableAllBut(6);
@@ -146,7 +149,7 @@ void loop() {
     // RF B LOW
     sendSignalToRC(2, false);
     break;
-  case 8:
+  case 69:
     // RF C HIGH
     sendSignalToRC(3, true);
     disableAllBut(8);
@@ -199,6 +202,32 @@ void disableAllBut(int Nono) {
  } 
 }
 
+int binary2decimal(byte b)
+{
+
+  int dec = 0;
+  int power = 1;
+  byte mask; 
+  int weight;
+  
+  for (mask = 0x01; mask; mask <<= 1)
+  {
+    if (b & mask)
+    {
+      weight = 1;     
+    }
+    else
+    {
+      weight = 0;     
+    }
+    
+    dec = dec + (power * weight);   
+    power = power * 2; 
+    
+ }
+  
+  return dec;
+ }
 
 
 
