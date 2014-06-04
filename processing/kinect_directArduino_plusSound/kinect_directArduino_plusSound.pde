@@ -172,9 +172,12 @@ void takeDirection(int userId) {
   text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
 
   text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
-
-  sendHValue(leftHorizontal);
-  sendHValue(rightHorizontal);
+  
+  if(leftVertical > rightVertical){
+    sendHValue(leftHorizontal);
+  }else{
+    sendHValue(rightHorizontal);
+  }
 }
 
 /* Send horizontal value function
