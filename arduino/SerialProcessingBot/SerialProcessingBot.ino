@@ -102,16 +102,15 @@ void sendSignalToRC(int x, boolean y) {
 
 
 void loop() {
-  if(Serial.available() > 0) {
-    serialVal = Serial.read();
-    Serial.println(serialVal);
-    delay(10);
+  
+  if(serialVal == 30) {
+    servoA.write(90);
   }
-
+  
   switch(serialVal) {
   case -1:
     break;
-  case 65:
+  case 30:
     // Servo A HIGH
     servoA.write(90);
     disableAllBut(0);
@@ -120,7 +119,7 @@ void loop() {
     // Servo A LOW
     servoA.write(0);
     break;
-  case 66:
+  case 90:
     // Servo B HIGH
     servoB.write(90);
     disableAllBut(2);
@@ -129,7 +128,7 @@ void loop() {
     // Servo B LOW
     servoB.write(0);
     break;
-  case 67:
+  case 150:
     // RF A HIGH
     sendSignalToRC(1, true);
     disableAllBut(4);
@@ -138,7 +137,7 @@ void loop() {
     // RF A LOW
     sendSignalToRC(1, false);
     break;
-  case 68:
+  case 200:
     // RF B HIGH
     sendSignalToRC(2, true);
     disableAllBut(6);
@@ -147,7 +146,7 @@ void loop() {
     // RF B LOW
     sendSignalToRC(2, false);
     break;
-  case 69:
+  case 300:
     // RF C HIGH
     sendSignalToRC(3, true);
     disableAllBut(8);
@@ -159,6 +158,14 @@ void loop() {
   default:
     break; 
   }
+  
+  if(Serial.available() > 0) {
+    serialVal = Serial.read();
+    Serial.println(serialVal);
+    delay(10);
+  }
+
+  
 
 }
 

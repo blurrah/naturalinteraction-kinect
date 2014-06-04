@@ -37,6 +37,19 @@ int time;
 int[] zValue = new int[6];
 int activeUser = 0;
 
+int value1 = 30;
+int value2 = 90;
+int value3 = 150;
+int value4 = 200;
+int value5 = 300;
+
+byte out[] = new byte[5];
+out[0] = byte(value1);
+out[1] = byte(value2);
+out[2] = byte(value3);
+out[3] = byte(value4);
+out[4] = byte(value5);
+
 /* Setup functie
  ================================================== */
 void setup() {
@@ -186,7 +199,7 @@ void sendHValue(int x) {
   switch(x) {
   case -4:
   case -3: 
-    arduinoPort.write(65); // Case 0 Doos (PT 11)
+    arduinoPort.write(out[0]); // Case 0 Doos (PT 11)
     println("DOOS");
     if (tickPlayerThread1) {
       audioPlay(0);
@@ -194,14 +207,14 @@ void sendHValue(int x) {
     break;
   case -2: 
   case -1: 
-    arduinoPort.write(66); // Case 2 Prullenbak (PT 10)
+    arduinoPort.write(out[1]); // Case 2 Prullenbak (PT 10)
     println("PRULLENBAK");
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 0: 
-    arduinoPort.write(67); // Case 4 Televisie (RF A)
+    arduinoPort.write(out[2]); // Case 4 Televisie (RF A)
     println("TELEVISIE");
     if (tickPlayerThread3) {
       audioPlay(2);
@@ -209,7 +222,7 @@ void sendHValue(int x) {
     break;
   case 1: 
   case 2: 
-    arduinoPort.write(67); // Case 6 Blender (RF B)
+    arduinoPort.write(out[3]); // Case 6 Blender (RF B)
     println("BLENDER");
     if (tickPlayerThread4) {
       audioPlay(3);
@@ -217,7 +230,7 @@ void sendHValue(int x) {
     break;
   case 3: 
   case 4: 
-    arduinoPort.write(68); // Case 8 Platenspeler (RF C)
+    arduinoPort.write(out[4]); // Case 8 Platenspeler (RF C)
     println("PLATENSPELER");
     if (tickPlayerThread5) {
       audioPlay(4);
