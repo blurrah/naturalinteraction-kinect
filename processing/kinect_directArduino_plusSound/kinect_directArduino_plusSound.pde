@@ -173,11 +173,11 @@ void takeDirection(int userId) {
 
   text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
   
-  if(leftVertical > rightVertical && leftVertical > -1){
+if(leftVertical > rightVertical && leftVertical > -2){
     sendHValue(leftHorizontal);
-  }else if(rightVertical > leftVertical && rightVertical > -1){
-    sendHValue(rightHorizontal);
-  }
+}//else if(rightVertical > leftVertical && rightVertical > -1){
+//    sendHValue(rightHorizontal);
+//  }
 }
 
 /* Send horizontal value function
@@ -195,13 +195,14 @@ void sendHValue(int x) {
   case -2: 
   case -1: 
     arduinoPort.write(66); // Case 2 Prullenbak (PT 10)
-    println("PRULLENBAK ");
+    println("PRULLENBAK");
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 0: 
     arduinoPort.write(67); // Case 4 Televisie (RF A)
+    println("TELEVISIE");
     if (tickPlayerThread3) {
       audioPlay(2);
     }
@@ -209,6 +210,7 @@ void sendHValue(int x) {
   case 1: 
   case 2: 
     arduinoPort.write(67); // Case 6 Blender (RF B)
+    println("BLENDER");
     if (tickPlayerThread4) {
       audioPlay(3);
     }
@@ -216,6 +218,7 @@ void sendHValue(int x) {
   case 3: 
   case 4: 
     arduinoPort.write(68); // Case 8 Platenspeler (RF C)
+    println("PLATENSPELER");
     if (tickPlayerThread5) {
       audioPlay(4);
     }

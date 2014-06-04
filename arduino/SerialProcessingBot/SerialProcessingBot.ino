@@ -163,48 +163,39 @@ void loop() {
 }
 
 void disableAllBut(int Nono) {
- switch(Nono) {
+  switch(Nono) {
   case 0:
-  // Als ServoA aangaat
-  servoB.write(0);
-  sendSignalToRC(1, false);
-  sendSignalToRC(2, false);
-  sendSignalToRC(3, false);
-  break;
+    // Als ServoA aangaat
+    servoB.write(0);
+    sendSignalToRC(1, false);
+    sendSignalToRC(2, false);
+    sendSignalToRC(3, false);
+    break;
   case 2:
-  servoA.write(0);
-  sendSignalToRC(1, false);
-  sendSignalToRC(2, false);
-  sendSignalToRC(3, false);
-  break;
+    servoA.write(0);
+    sendSignalToRC(1, false);
+    sendSignalToRC(2, false);
+    sendSignalToRC(3, false);
+    break;
   case 4:
-  servoA.write(0);
-  servoB.write(0);
-  sendSignalToRC(2, false);
-  sendSignalToRC(3, false);
-  break;
+    servoA.write(0);
+    servoB.write(0);
+    sendSignalToRC(2, false);
+    sendSignalToRC(3, false);
+    break;
   case 6:
-  servoA.write(0);
-  servoB.write(0);
-  sendSignalToRC(1, false);
-  sendSignalToRC(3, false);
-  break;
+    servoA.write(0);
+    servoB.write(0);
+    sendSignalToRC(1, false);
+    sendSignalToRC(3, false);
+    break;
   case 8:
-  servoA.write(0);
-  servoB.write(0);
-  sendSignalToRC(1, false);
-  sendSignalToRC(2, false);
-  break;
+    servoA.write(0);
+    servoB.write(0);
+    sendSignalToRC(1, false);
+    sendSignalToRC(2, false);
+    break;
   default:
-  break;
- } 
+    break;
+  } 
 }
-
-
-
-
-
-
-
-
-
