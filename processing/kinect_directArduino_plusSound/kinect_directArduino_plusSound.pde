@@ -56,7 +56,7 @@ void setup() {
   minim = new Minim(this);
   player1 = minim.loadFile("doos.wav"); // Case 0 Doos
   player2 = minim.loadFile("prullenbak.mp3"); // Case 2 Prullenbak
-  player3 = minim.loadFile("tv.mp3"); // Case 4 RF A Televisie
+  player3 = minim.loadFile("doos.wav"); // Case 4 RF A Televisie
   player4 = minim.loadFile("blender.mp3"); // Case 6 RF B Blender
   player5 = minim.loadFile("platenspeler.wav"); // Case 8 RF C Platenspeler
 
@@ -186,7 +186,7 @@ void sendHValue(int x) {
   switch(x) {
   case -4:
   case -3: 
-    arduinoPort.write(0); // Case 0 Doos (PT 11)
+    arduinoPort.write(65); // Case 0 Doos (PT 11)
     println("DOOS");
     if (tickPlayerThread1) {
       audioPlay(0);
@@ -194,28 +194,28 @@ void sendHValue(int x) {
     break;
   case -2: 
   case -1: 
-    arduinoPort.write(2); // Case 2 Prullenbak (PT 10)
-    println("PRULLENBAK");
+    arduinoPort.write(66); // Case 2 Prullenbak (PT 10)
+    println("PRULLENBAK ");
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 0: 
-    arduinoPort.write(4); // Case 4 Televisie (RF A)
+    arduinoPort.write(67); // Case 4 Televisie (RF A)
     if (tickPlayerThread3) {
       audioPlay(2);
     }
     break;
   case 1: 
   case 2: 
-    arduinoPort.write(6); // Case 6 Blender (RF B)
+    arduinoPort.write(67); // Case 6 Blender (RF B)
     if (tickPlayerThread4) {
       audioPlay(3);
     }
     break;
   case 3: 
   case 4: 
-    arduinoPort.write(8); // Case 8 Platenspeler (RF C)
+    arduinoPort.write(68); // Case 8 Platenspeler (RF C)
     if (tickPlayerThread5) {
       audioPlay(4);
     }
