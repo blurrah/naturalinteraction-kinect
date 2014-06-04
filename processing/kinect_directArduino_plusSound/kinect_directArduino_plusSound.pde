@@ -31,6 +31,19 @@ PVector com2d = new PVector();
 
 int time;
 
+/* Definities
+ ================================================== */
+#define ServoAHigh 0
+#define ServoALow 1
+#define ServoBHigh 2
+#define ServoBLow 3
+#define rfAHigh 4
+#define rfALow 5
+#define rfBHigh 6
+#define rfBLow 7
+#define rfCHigh 8
+#define rfCLow 9
+
 /* Setup functie
  ================================================== */
 void setup() {
@@ -146,113 +159,63 @@ void takeDirection(int userId) {
   text("X: " + rightHorizontal, com2d.x + 64, com2d.y);
   text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
 
-  sendHValue(leftHorizontal, 0);
-  sendHValue(rightHorizontal, 1);
-  sendVValue(leftVertical, 0);
-  sendVValue(rightVertical, 1);
+  sendHValue(leftHorizontal);
+  sendHValue(rightHorizontal);
+  sendVValue(leftVertical);
+  sendVValue(rightVertical);
 }
 
 /* Send horizontal value function
  ================================================== */
-void sendHValue(int x, int y) {
-  if (y == 0) {
-    switch(x) {
-    case -4:
-    case -3: 
-      arduinoPort.write('A');
-      break;
-    case -2: 
-      arduinoPort.write('B');
-      break;
-    case -1: 
-      arduinoPort.write('C');
-      break;
-    case 0: 
-      arduinoPort.write('D');
-      break;
-    case 1: 
-      arduinoPort.write('E');
-      break;
-    case 2: 
-      arduinoPort.write('F');
-      break;
-    case 3: 
-    case 4: 
-      arduinoPort.write('G');
-      break;
-    }
-  } else if (y == 1) {
-    switch(x) {
-    case -4:
-    case -3: 
-      arduinoPort.write('H');
-      break;
-    case -2: 
-      arduinoPort.write('I');
-      break;
-    case -1: 
-      arduinoPort.write('J');
-      break;
-    case 0: 
-      arduinoPort.write('K');
-      break;
-    case 1: 
-      arduinoPort.write('L');
-      break;
-    case 2: 
-      arduinoPort.write('M');
-      break;
-    case 3: 
-    case 4: 
-      arduinoPort.write('N');
-      break;
-    }
+void sendHValue(int x) {
+  switch(x) {
+  case -4:
+  case -3: 
+    arduinoPort.write('A');
+    break;
+  case -2: 
+    arduinoPort.write('B');
+    break;
+  case -1: 
+    arduinoPort.write('C');
+    break;
+  case 0: 
+    arduinoPort.write('D');
+    break;
+  case 1: 
+    arduinoPort.write('E');
+    break;
+  case 2: 
+    arduinoPort.write('F');
+    break;
+  case 3: 
+  case 4: 
+    arduinoPort.write('G');
+    break;
   }
 }
 
 /* Send vertical value function
  ================================================== */
-void sendVValue(int x, int y) {
-  if (y == 0) {
-    switch(x) {
-    case -3:
-    case -2: 
-      arduinoPort.write('0');
-      break;
-    case -1: 
-      arduinoPort.write('1');
-      break;
-    case 0: 
-      arduinoPort.write('2');
-      break;
-    case 1: 
-      arduinoPort.write('3');
-      break;
-    case 2: 
-    case 3: 
-      arduinoPort.write('4');
-      break;
-    }
-  } else if (y == 1) {
-    switch(x) {
-    case -3:
-    case -2: 
-      arduinoPort.write('5');
-      break;
-    case -1: 
-      arduinoPort.write('6');
-      break;
-    case 0: 
-      arduinoPort.write('7');
-      break;
-    case 1: 
-      arduinoPort.write('8');
-      break;
-    case 2: 
-    case 3: 
-      arduinoPort.write('9');
-      break;
-    }
+void sendVValue(int x) {
+  switch(x) {
+  case -3:
+  case -2: 
+    arduinoPort.write('0');
+    break;
+  case -1: 
+    arduinoPort.write('1');
+    break;
+  case 0: 
+    arduinoPort.write('2');
+    break;
+  case 1: 
+    arduinoPort.write('3');
+    break;
+  case 2: 
+  case 3: 
+    arduinoPort.write('4');
+    break;
   }
 }
 
