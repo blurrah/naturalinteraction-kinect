@@ -161,8 +161,6 @@ void takeDirection(int userId) {
 
   sendHValue(leftHorizontal);
   sendHValue(rightHorizontal);
-  sendVValue(leftVertical);
-  sendVValue(rightVertical);
 }
 
 /* Send horizontal value function
@@ -172,6 +170,7 @@ void sendHValue(int x) {
   case -4:
   case -3: 
     arduinoPort.write('A');
+    break;
     break;
   case -2: 
     arduinoPort.write('B');
@@ -192,29 +191,6 @@ void sendHValue(int x) {
   case 4: 
     arduinoPort.write('G');
     break;
-  }
-}
-
-/* Send vertical value function
- ================================================== */
-void sendVValue(int x) {
-  switch(x) {
-  case -3:
-  case -2: 
-    arduinoPort.write('0');
-    break;
-  case -1: 
-    arduinoPort.write('1');
-    break;
-  case 0: 
-    arduinoPort.write('2');
-    break;
-  case 1: 
-    arduinoPort.write('3');
-    break;
-  case 2: 
-  case 3: 
-    arduinoPort.write('4');
     break;
   }
 }
