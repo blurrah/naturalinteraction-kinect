@@ -34,6 +34,8 @@ PVector com = new PVector();
 PVector com2d = new PVector();  
 
 int time;
+int[] zValue = new int[6];
+int activeUser = 0;
 
 /* Setup functie
  ================================================== */
@@ -89,13 +91,26 @@ void draw() {
       fill(255, 255, 255);
       text(Integer.toString(userList[i]), com2d.x, com2d.y);
 
-      takeDirection(userList[i]);
+      zValue[i] = int(com2d.z);
+
+      if (zValue.length > 0) {
+        int MIN = MAX_INT; 
+        int index = 0;
+
+        for (int o=0; o < zValue.length; o++) { 
+          if (zValue[o]<MIN && zValue[o] != 0.0) { 
+            MIN=zValue[o]; 
+            index = o;
+            activeUser = index + 1;
+          }
+        } 
+
+        println("Primary user: " + activeUser);
+      }
+
+      takeDirection(activeUser);
     }
   }
-}
-
-int defineUser(){
-  i = userList.length;
 }
 
 /* Take direction function
@@ -156,7 +171,7 @@ void takeDirection(int userId) {
   text("X: " + rightHorizontal, com2d.x + 64, com2d.y);
   text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
 
-  text("Z: " + com2d.z, com2d.x, com2d.y + 15);
+  text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
 
   sendHValue(leftHorizontal);
   sendHValue(rightHorizontal);
