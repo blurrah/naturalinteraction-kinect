@@ -34,6 +34,7 @@ PVector com = new PVector();
 PVector com2d = new PVector();  
 
 int time;
+int lastTime;
 int[] zValue = new int[6];
 int activeUser = 0;
 
@@ -43,13 +44,16 @@ int value3 = 150;
 int value4 = 200;
 int value5 = 300;
 
-byte out[] = new byte[5];
+byte[] out = {
+  byte(value1), byte(value2), byte(value3), byte(value4), byte(value5)
+};
+/*
 out[0] = byte(value1);
-out[1] = byte(value2);
-out[2] = byte(value3);
-out[3] = byte(value4);
-out[4] = byte(value5);
-
+ out[1] = byte(value2);
+ out[2] = byte(value3);
+ out[3] = byte(value4);
+ out[4] = byte(value5);
+ 
 /* Setup functie
  ================================================== */
 void setup() {
@@ -61,6 +65,7 @@ void setup() {
   smooth();
 
   time = millis();
+  lastTime = millis();
 
   // Arduino configuration
   arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
@@ -185,12 +190,15 @@ void takeDirection(int userId) {
   text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
 
   text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
-  
-if(leftVertical > rightVertical && leftVertical > -2){
-    sendHValue(leftHorizontal);
-}//else if(rightVertical > leftVertical && rightVertical > -1){
-//    sendHValue(rightHorizontal);
-//  }
+
+  if (leftVertical > rightVertical && leftVertical > -2) {
+    if ( millis() - lastTime > 15 ) {
+      sendHValue(leftHorizontal);
+      lastTime = millis();
+    }
+  }//else if(rightVertical > leftVertical && rightVertical > -1){
+  //    sendHValue(rightHorizontal);
+  //  }
 }
 
 /* Send horizontal value function
