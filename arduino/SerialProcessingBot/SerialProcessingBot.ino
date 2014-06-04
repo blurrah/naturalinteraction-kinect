@@ -106,8 +106,6 @@ void loop() {
     serialVal = Serial.read();
     Serial.println(serialVal);
     delay(10);
-    //serialVal = binary2decimal(serialVal);
-    
   }
 
   switch(serialVal) {
@@ -201,33 +199,6 @@ void disableAllBut(int Nono) {
   break;
  } 
 }
-
-int binary2decimal(byte b)
-{
-
-  int dec = 0;
-  int power = 1;
-  byte mask; 
-  int weight;
-  
-  for (mask = 0x01; mask; mask <<= 1)
-  {
-    if (b & mask)
-    {
-      weight = 1;     
-    }
-    else
-    {
-      weight = 0;     
-    }
-    
-    dec = dec + (power * weight);   
-    power = power * 2; 
-    
- }
-  
-  return dec;
- }
 
 
 
