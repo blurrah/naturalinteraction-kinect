@@ -203,11 +203,12 @@ void takeDirection(int primaryUser) {
 /* Send horizontal value function
  ================================================== */
 void sendHValue(int x) {
+  textSize(18);
   switch(x) {
   case 4:
   case 3: 
     // arduinoPort.write(out[0]); // Case 0 Doos (PT 11)
-    println("DOOS");
+    text("DOOS", 10, 450);
     if (tickPlayerThread1) {
       audioPlay(0);
     }
@@ -215,14 +216,14 @@ void sendHValue(int x) {
   case 2: 
   case 1: 
     // arduinoPort.write(out[1]); // Case 2 Prullenbak (PT 10)
-    println("PRULLENBAK");
+    text("PRULLENBAK", 10, 450);
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 0: 
     // arduinoPort.write(out[2]); // Case 4 Televisie (RF A)
-    println("TELEVISIE");
+    text("TELEVISIE", 10, 450);
     if (tickPlayerThread3) {
       audioPlay(2);
     }
@@ -230,7 +231,7 @@ void sendHValue(int x) {
   case -1: 
   case -2: 
     // arduinoPort.write(out[3]); // Case 6 Blender (RF B)
-    println("BLENDER");
+    text("BLENDER", 10, 450);
     if (tickPlayerThread4) {
       audioPlay(3);
     }
@@ -238,7 +239,7 @@ void sendHValue(int x) {
   case -3: 
   case -4: 
     // arduinoPort.write(out[4]); // Case 8 Platenspeler (RF C)
-    println("PLATENSPELER");
+    text("PLATENSPELER", 10, 450);
     if (tickPlayerThread5) {
       audioPlay(4);
     }
