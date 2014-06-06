@@ -68,7 +68,7 @@ void setup() {
   lastTime = millis();
 
   // Arduino configuration
-  arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
+  // arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
 
   // Audio configuration
   minim = new Minim(this);
@@ -121,9 +121,7 @@ void draw() {
             index = o;
             activeUser = index + 1;
           }
-        } 
-
-        println("Primary user: " + activeUser);
+        }
       }
 
       takeDirection(activeUser);
@@ -133,9 +131,7 @@ void draw() {
 
 /* Take direction function
  ================================================== */
-void takeDirection(int userId) {
-  fill(255, 255, 255);
-  textSize(14);
+void takeDirection(int primaryUser) {
 
   PVector leftHand = new PVector();
   PVector leftElbow = new PVector();
@@ -144,13 +140,13 @@ void takeDirection(int userId) {
   PVector rightElbow = new PVector();
   PVector rightShoulder = new PVector();
 
-  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);
-  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_ELBOW, leftElbow);
-  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, leftShoulder);
-  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
-  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_ELBOW, rightElbow);
-  context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, rightShoulder);
-
+  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);
+  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_LEFT_ELBOW, leftElbow);
+  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_LEFT_SHOULDER, leftShoulder);
+  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
+  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_RIGHT_ELBOW, rightElbow);
+  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_RIGHT_SHOULDER, rightShoulder);
+  
   /*
      * Serial mapping stuff
    -1  Niks
@@ -165,7 +161,10 @@ void takeDirection(int userId) {
    8   rfC    HIGH
    9   rfC    LOW
    */
-
+  
+  fill(255, 255, 255);
+  textSize(14);
+  
   // Start defining variables
   int leftHandX = parseInt(leftHand.x);
   int leftHandY = parseInt(leftHand.y);
@@ -192,7 +191,7 @@ void takeDirection(int userId) {
   text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
 
   if (leftVertical > rightVertical && leftVertical > -2) {
-    if ( millis() - lastTime > 15 ) {
+    if ( millis() - lastTime > 100 ) {
       sendHValue(leftHorizontal);
       lastTime = millis();
     }
@@ -205,40 +204,40 @@ void takeDirection(int userId) {
  ================================================== */
 void sendHValue(int x) {
   switch(x) {
-  case -4:
-  case -3: 
-    arduinoPort.write(out[0]); // Case 0 Doos (PT 11)
+  case 4:
+  case 3: 
+    // arduinoPort.write(out[0]); // Case 0 Doos (PT 11)
     println("DOOS");
     if (tickPlayerThread1) {
       audioPlay(0);
     }
     break;
-  case -2: 
-  case -1: 
-    arduinoPort.write(out[1]); // Case 2 Prullenbak (PT 10)
+  case 2: 
+  case 1: 
+    // arduinoPort.write(out[1]); // Case 2 Prullenbak (PT 10)
     println("PRULLENBAK");
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 0: 
-    arduinoPort.write(out[2]); // Case 4 Televisie (RF A)
+    // arduinoPort.write(out[2]); // Case 4 Televisie (RF A)
     println("TELEVISIE");
     if (tickPlayerThread3) {
       audioPlay(2);
     }
     break;
-  case 1: 
-  case 2: 
-    arduinoPort.write(out[3]); // Case 6 Blender (RF B)
+  case -1: 
+  case -2: 
+    // arduinoPort.write(out[3]); // Case 6 Blender (RF B)
     println("BLENDER");
     if (tickPlayerThread4) {
       audioPlay(3);
     }
     break;
-  case 3: 
-  case 4: 
-    arduinoPort.write(out[4]); // Case 8 Platenspeler (RF C)
+  case -3: 
+  case -4: 
+    // arduinoPort.write(out[4]); // Case 8 Platenspeler (RF C)
     println("PLATENSPELER");
     if (tickPlayerThread5) {
       audioPlay(4);
@@ -330,16 +329,16 @@ void audioPlay(int player) {
 /* SimpleOpenNI events
  ================================================== */
 void onNewUser(SimpleOpenNI curContext, int userId) {
-  println("onNewUser - userId: " + userId);
-  println("\tstart tracking skeleton");
+  //println("onNewUser - userId: " + userId);
+  //println("\tstart tracking skeleton");
   curContext.startTrackingSkeleton(userId);
 }
 
 void onLostUser(SimpleOpenNI curContext, int userId) {
-  println("onLostUser - userId: " + userId);
+  //println("onLostUser - userId: " + userId);
 }
 
 void onVisibleUser(SimpleOpenNI curContext, int userId) {
-  println("onVisibleUser - userId: " + userId);
+  //println("onVisibleUser - userId: " + userId);
 }
 
