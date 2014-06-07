@@ -68,7 +68,7 @@ void setup() {
   lastTime = millis();
 
   // Arduino configuration
-  // arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
+  arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
 
   // Audio configuration
   minim = new Minim(this);
@@ -190,8 +190,8 @@ void takeDirection(int primaryUser) {
 
   text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
 
-  if (leftVertical > rightVertical && leftVertical > -2) {
-    if ( millis() - lastTime > 100 ) {
+  if (leftVertical > -2) {
+    if ( millis() - lastTime > 66 ) {
       sendHValue(leftHorizontal);
       lastTime = millis();
     }
@@ -207,7 +207,7 @@ void sendHValue(int x) {
   switch(x) {
   case 4:
   case 3: 
-    // arduinoPort.write(out[0]); // Case 0 Doos (PT 11)
+    arduinoPort.write('A'); // Case 0 Doos (PT 11)
     text("DOOS", 10, 450);
     if (tickPlayerThread1) {
       audioPlay(0);
@@ -215,14 +215,14 @@ void sendHValue(int x) {
     break;
   case 2: 
   case 1: 
-    // arduinoPort.write(out[1]); // Case 2 Prullenbak (PT 10)
+    arduinoPort.write('B'); // Case 2 Prullenbak (PT 10)
     text("PRULLENBAK", 10, 450);
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 0: 
-    // arduinoPort.write(out[2]); // Case 4 Televisie (RF A)
+    arduinoPort.write('C'); // Case 4 Televisie (RF A)
     text("TELEVISIE", 10, 450);
     if (tickPlayerThread3) {
       audioPlay(2);
@@ -230,7 +230,7 @@ void sendHValue(int x) {
     break;
   case -1: 
   case -2: 
-    // arduinoPort.write(out[3]); // Case 6 Blender (RF B)
+    arduinoPort.write('D'); // Case 6 Blender (RF B)
     text("BLENDER", 10, 450);
     if (tickPlayerThread4) {
       audioPlay(3);
@@ -238,7 +238,7 @@ void sendHValue(int x) {
     break;
   case -3: 
   case -4: 
-    // arduinoPort.write(out[4]); // Case 8 Platenspeler (RF C)
+    arduinoPort.write('E'); // Case 8 Platenspeler (RF C)
     text("PLATENSPELER", 10, 450);
     if (tickPlayerThread5) {
       audioPlay(4);
