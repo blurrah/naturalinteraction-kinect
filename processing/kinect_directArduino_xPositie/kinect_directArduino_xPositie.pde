@@ -121,33 +121,33 @@ void sendHValue(int x) {
   x = round(x / 100);
   text(x, com2d.x, com2d.y + 25);
   
-  textSize(18);
+  textSize(14);
   switch(x) {
   case 0:
   case 1: 
     // arduinoPort.write('A'); // Case 0 Doos (PT 11)
-    text("DOOS", 10, 450);
+    text("DOOS", com2d.x, 450);
     if (tickPlayerThread1) {
       audioPlay(0);
     }
     break;
   case 2: 
     // arduinoPort.write('B'); // Case 2 Prullenbak (PT 10)
-    text("PRULLENBAK", 10, 450);
+    text("PRULLENBAK", com2d.x, 450);
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 3: 
     // arduinoPort.write('C'); // Case 4 Televisie (RF A)
-    text("TELEVISIE", 10, 450);
+    text("TELEVISIE", com2d.x, 450);
     if (tickPlayerThread3) {
       audioPlay(2);
     }
     break;
   case 4: 
     // arduinoPort.write('D'); // Case 6 Blender (RF B)
-    text("BLENDER", 10, 450);
+    text("BLENDER", com2d.x, 450);
     if (tickPlayerThread4) {
       audioPlay(3);
     }
@@ -155,7 +155,7 @@ void sendHValue(int x) {
   case 5:
   case 6:
     // arduinoPort.write('E'); // Case 8 Platenspeler (RF C)
-    text("PLATENSPELER", 10, 450);
+    text("PLATENSPELER", com2d.x, 450);
     if (tickPlayerThread5) {
       audioPlay(4);
     }
