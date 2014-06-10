@@ -35,8 +35,6 @@ PVector com2d = new PVector();
 
 int time;
 int lastTime;
-int[] zValue = new int[6];
-int activeUser = 0;
 
 int value1 = 30;
 int value2 = 90;
@@ -46,48 +44,48 @@ int value5 = 300;
 
 byte[] out = {
   byte(value1), byte(value2), byte(value3), byte(value4), byte(value5)
-};
-/*
+  };
+  /*
 out[0] = byte(value1);
- out[1] = byte(value2);
- out[2] = byte(value3);
- out[3] = byte(value4);
- out[4] = byte(value5);
- 
-/* Setup functie
- ================================================== */
-void setup() {
-  // View configuration
-  size(640, 480);
-  background(200, 0, 0);
-  stroke(0, 0, 255);
-  strokeWeight(3);
-  smooth();
+   out[1] = byte(value2);
+   out[2] = byte(value3);
+   out[3] = byte(value4);
+   out[4] = byte(value5);
+   
+  /* Setup functie
+   ================================================== */
+  void setup() {
+    // View configuration
+    size(640, 480);
+    background(200, 0, 0);
+    stroke(0, 0, 255);
+    strokeWeight(3);
+    smooth();
 
-  time = millis();
-  lastTime = millis();
+    time = millis();
+    lastTime = millis();
 
-  // Arduino configuration
-  arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
+    // Arduino configuration
+    // arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
 
-  // Audio configuration
-  minim = new Minim(this);
-  player1 = minim.loadFile("doos.wav"); // Case 0 Doos
-  player2 = minim.loadFile("prullenbak.mp3"); // Case 2 Prullenbak
-  player3 = minim.loadFile("doos.wav"); // Case 4 RF A Televisie
-  player4 = minim.loadFile("blender.mp3"); // Case 6 RF B Blender
-  player5 = minim.loadFile("platenspeler.wav"); // Case 8 RF C Platenspeler
+    // Audio configuration
+    minim = new Minim(this);
+    player1 = minim.loadFile("doos.wav"); // Case 0 Doos
+    player2 = minim.loadFile("prullenbak.mp3"); // Case 2 Prullenbak
+    player3 = minim.loadFile("doos.wav"); // Case 4 RF A Televisie
+    player4 = minim.loadFile("blender.mp3"); // Case 6 RF B Blender
+    player5 = minim.loadFile("platenspeler.wav"); // Case 8 RF C Platenspeler
 
-  // Kinect configuration
-  context = new SimpleOpenNI(this);
-  if (context.isInit() == false) {
-    println("Can't init SimpleOpenNI, maybe the camera is not connected!"); 
-    exit();
-    return;
+    // Kinect configuration
+    context = new SimpleOpenNI(this);
+    if (context.isInit() == false) {
+      println("Can't init SimpleOpenNI, maybe the camera is not connected!"); 
+      exit();
+      return;
+    }
+    context.enableDepth();
+    context.enableUser();
   }
-  context.enableDepth();
-  context.enableUser();
-}
 
 /* Draw functie
  ================================================== */
@@ -108,137 +106,55 @@ void draw() {
 
       fill(255, 255, 255);
       text(Integer.toString(userList[i]), com2d.x, com2d.y);
-
-      zValue[i] = int(com2d.z);
-
-      if (zValue.length > 0) {
-        int MIN = MAX_INT; 
-        int index = 0;
-
-        for (int o=0; o < zValue.length; o++) { 
-          if (zValue[o]<MIN && zValue[o] != 0.0) { 
-            MIN=zValue[o]; 
-            index = o;
-            activeUser = index + 1;
-          }
-        }
+      
+      if (com2d.x >= 0 && com2d.x <= 640) { 
+        sendHValue(int(com2d.x));
       }
-
-      takeDirection(activeUser);
     }
   }
-}
-
-/* Take direction function
- ================================================== */
-void takeDirection(int primaryUser) {
-
-  PVector leftHand = new PVector();
-  PVector leftElbow = new PVector();
-  PVector leftShoulder = new PVector();
-  PVector rightHand = new PVector();
-  PVector rightElbow = new PVector();
-  PVector rightShoulder = new PVector();
-
-  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);
-  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_LEFT_ELBOW, leftElbow);
-  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_LEFT_SHOULDER, leftShoulder);
-  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
-  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_RIGHT_ELBOW, rightElbow);
-  context.getJointPositionSkeleton(primaryUser, SimpleOpenNI.SKEL_RIGHT_SHOULDER, rightShoulder);
-  
-  /*
-     * Serial mapping stuff
-   -1  Niks
-   0   ServoA HIGH
-   1   ServoA LOW
-   2   ServoB HIGH
-   3   ServoB LOW
-   4   rfA    HIGH
-   5   rfA    LOW
-   6   rfB    HIGH
-   7   rfB    LOW
-   8   rfC    HIGH
-   9   rfC    LOW
-   */
-  
-  fill(255, 255, 255);
-  textSize(14);
-  
-  // Start defining variables
-  int leftHandX = parseInt(leftHand.x);
-  int leftHandY = parseInt(leftHand.y);
-  int leftElbowY = parseInt(leftElbow.y);
-  int leftShoulderX = parseInt(leftShoulder.x);
-
-  int leftHorizontal = round((leftHandX - leftShoulderX) / 100);
-  int leftVertical = round((leftHandY - leftElbowY) / 100);
-  textAlign(RIGHT);
-  text("X: " + leftHorizontal, com2d.x - 64, com2d.y);
-  text("Y: " + leftVertical, com2d.x - 64, com2d.y + 15);
-
-  int rightHandX = parseInt(rightHand.x);
-  int rightHandY = parseInt(rightHand.y);
-  int rightElbowY = parseInt(rightElbow.y);
-  int rightShoulderX = parseInt(rightShoulder.x);
-
-  int rightHorizontal = round((rightHandX - rightShoulderX) / 100);
-  int rightVertical = round((rightHandY - rightElbowY) / 100);
-  textAlign(LEFT);
-  text("X: " + rightHorizontal, com2d.x + 64, com2d.y);
-  text("Y: " + rightVertical, com2d.x + 64, com2d.y + 15);
-
-  text("Z: " + round(com2d.z / 100), com2d.x, com2d.y + 15);
-
-  if (leftVertical > -2) {
-    if ( millis() - lastTime > 66 ) {
-      sendHValue(leftHorizontal);
-      lastTime = millis();
-    }
-  }//else if(rightVertical > leftVertical && rightVertical > -1){
-  //    sendHValue(rightHorizontal);
-  //  }
 }
 
 /* Send horizontal value function
  ================================================== */
 void sendHValue(int x) {
+  
+  x = round(x / 100);
+  text(x, com2d.x, com2d.y + 25);
+  
   textSize(18);
   switch(x) {
-  case 4:
-  case 3: 
-    arduinoPort.write('A'); // Case 0 Doos (PT 11)
+  case 0:
+  case 1: 
+    // arduinoPort.write('A'); // Case 0 Doos (PT 11)
     text("DOOS", 10, 450);
     if (tickPlayerThread1) {
       audioPlay(0);
     }
     break;
   case 2: 
-  case 1: 
-    arduinoPort.write('B'); // Case 2 Prullenbak (PT 10)
+    // arduinoPort.write('B'); // Case 2 Prullenbak (PT 10)
     text("PRULLENBAK", 10, 450);
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
-  case 0: 
-    arduinoPort.write('C'); // Case 4 Televisie (RF A)
+  case 3: 
+    // arduinoPort.write('C'); // Case 4 Televisie (RF A)
     text("TELEVISIE", 10, 450);
     if (tickPlayerThread3) {
       audioPlay(2);
     }
     break;
-  case -1: 
-  case -2: 
-    arduinoPort.write('D'); // Case 6 Blender (RF B)
+  case 4: 
+    // arduinoPort.write('D'); // Case 6 Blender (RF B)
     text("BLENDER", 10, 450);
     if (tickPlayerThread4) {
       audioPlay(3);
     }
-    break;
-  case -3: 
-  case -4: 
-    arduinoPort.write('E'); // Case 8 Platenspeler (RF C)
+    break; 
+  case 5:
+  case 6:
+    // arduinoPort.write('E'); // Case 8 Platenspeler (RF C)
     text("PLATENSPELER", 10, 450);
     if (tickPlayerThread5) {
       audioPlay(4);
