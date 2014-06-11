@@ -5,22 +5,12 @@
  * Processing.
  * xoxox Boris & Jasper
  */
-#include <RCSwitch.h>
 #include <Servo.h>
 
-// Frequentie const's
-#define freqA1 "F0FFF0FFFF0F"
-#define freqA0 "F0FFF0FFFFF0"
-#define freqB1 "F0FFFF0FFF0F"
-#define freqB0 "F0FFFF0FFFF0"
-#define freqC1 "F0FFFFF0FF0F"
-#define freqC0 "F0FFFFF0FFF0"
-#define freqD1 "F0FFFFFF0F0F" // Alles aan
-#define freqD0 "F0FFFFFF0FF0" // Alles uit
 
 
 // Seriele shit
-int serialVal;
+int val;
 
 /*
  * Serial mapping stuff
@@ -50,7 +40,6 @@ int serialVal;
 #define rfCLow 9
 
 // Objecten aanroepen
-RCSwitch rcSwitch = RCSwitch();
 
 Servo servoA;
 Servo servoB;
@@ -61,56 +50,22 @@ void setup() {
   servoA.attach(11);
   servoB.attach(10);
 
-  rcSwitch.enableTransmit(6);
-  rcSwitch.setPulseLength(318);
-  rcSwitch.setProtocol(1);
-  rcSwitch.setRepeatTransmit(6);
+  
 
 }
 
-void sendSignalToRC(int x, boolean y) {
-  switch(x){
-  case 1:
-    if(y) {
-      rcSwitch.sendTriState(freqA1);
-    } 
-    else {
-      rcSwitch.sendTriState(freqA0); 
-    }
-    break;
-  case 2:
-    if(y) {
-      rcSwitch.sendTriState(freqB1);  
-    } 
-    else {
-      rcSwitch.sendTriState(freqB1);
-    }
-
-    break;
-  case 3:
-    if(y) {
-      rcSwitch.sendTriState(freqC1); 
-    } 
-    else {
-      rcSwitch.sendTriState(freqC0);
-    }
-    break;
-  default:
-    break;
-  }
-}
 
 
 void loop() {
-  
-  if(serialVal == 30) {
-    servoA.write(90);
+  if(Serial.available()) {
+   val = Serial.read();
+  Serial.println(val); 
   }
   
-  switch(serialVal) {
+  switch(val) {
   case -1:
     break;
-  case 30:
+  case 'A':
     // Servo A HIGH
     servoA.write(90);
     disableAllBut(0);
@@ -119,7 +74,7 @@ void loop() {
     // Servo A LOW
     servoA.write(0);
     break;
-  case 90:
+  case 'B':
     // Servo B HIGH
     servoB.write(90);
     disableAllBut(2);
@@ -128,42 +83,11 @@ void loop() {
     // Servo B LOW
     servoB.write(0);
     break;
-  case 150:
-    // RF A HIGH
-    sendSignalToRC(1, true);
-    disableAllBut(4);
-    break;
-  case 5:
-    // RF A LOW
-    sendSignalToRC(1, false);
-    break;
-  case 200:
-    // RF B HIGH
-    sendSignalToRC(2, true);
-    disableAllBut(6);
-    break;
-  case 7:
-    // RF B LOW
-    sendSignalToRC(2, false);
-    break;
-  case 300:
-    // RF C HIGH
-    sendSignalToRC(3, true);
-    disableAllBut(8);
-    break;
-  case 9:
-    // RF C LOW
-    sendSignalToRC(3, false);
-    break;
+  
   default:
     break; 
   }
   
-  if(Serial.available() > 0) {
-    serialVal = Serial.read();
-    Serial.println(serialVal);
-    delay(10);
-  }
 
   
 
@@ -174,33 +98,21 @@ void disableAllBut(int Nono) {
   case 0:
     // Als ServoA aangaat
     servoB.write(0);
-    sendSignalToRC(1, false);
-    sendSignalToRC(2, false);
-    sendSignalToRC(3, false);
     break;
   case 2:
     servoA.write(0);
-    sendSignalToRC(1, false);
-    sendSignalToRC(2, false);
-    sendSignalToRC(3, false);
     break;
   case 4:
     servoA.write(0);
     servoB.write(0);
-    sendSignalToRC(2, false);
-    sendSignalToRC(3, false);
     break;
   case 6:
     servoA.write(0);
     servoB.write(0);
-    sendSignalToRC(1, false);
-    sendSignalToRC(3, false);
     break;
   case 8:
     servoA.write(0);
     servoB.write(0);
-    sendSignalToRC(1, false);
-    sendSignalToRC(2, false);
     break;
   default:
     break;
