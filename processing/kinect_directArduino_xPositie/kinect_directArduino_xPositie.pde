@@ -69,8 +69,8 @@ out[0] = byte(value1);
     lastTime = millis();
 
     // Arduino configuration
-    arduino1 = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
-    arduino2 = new Arduino(this, "/dev/tty.usbmodem1412", 57600);
+    arduino1 = new Arduino(this, "/dev/tty.usbmodemfd131", 57600);
+    arduino2 = new Arduino(this, "/dev/tty.usbmodemfd141", 57600);
 
     arduino1.pinMode(11, Arduino.SERVO);
     arduino1.pinMode(10, Arduino.SERVO);
