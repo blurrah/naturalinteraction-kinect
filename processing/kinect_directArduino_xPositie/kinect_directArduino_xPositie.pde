@@ -66,7 +66,7 @@ out[0] = byte(value1);
     lastTime = millis();
 
     // Arduino configuration
-    // arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
+    arduinoPort = new Serial(this, "/dev/tty.usbmodem1411", 9600);
 
     // Audio configuration
     minim = new Minim(this);
@@ -124,40 +124,40 @@ void sendHValue(int x) {
   textSize(14);
   switch(x) {
   case 0:
-  case 1: 
-    // arduinoPort.write('A'); // Case 0 Doos (PT 11)
-    text("DOOS", com2d.x, 450);
-    if (tickPlayerThread1) {
-      audioPlay(0);
+  case 1:
+    // arduinoPort.write('E'); // Case 8 Platenspeler (RF C)
+    text("PLATENSPELER", com2d.x, 450);
+    if (tickPlayerThread5) {
+      audioPlay(4);
     }
     break;
   case 2: 
-    // arduinoPort.write('B'); // Case 2 Prullenbak (PT 10)
+    arduinoPort.write('B'); // Case 2 Prullenbak (PT 10)
     text("PRULLENBAK", com2d.x, 450);
     if (tickPlayerThread2) {
       audioPlay(1);
     }
     break;
   case 3: 
+    arduinoPort.write('A'); // Case 0 Doos (PT 11)
+    text("DOOS", com2d.x, 450);
+    if (tickPlayerThread1) {
+      audioPlay(0);
+    }
+    break;
+  case 4: 
     // arduinoPort.write('C'); // Case 4 Televisie (RF A)
     text("TELEVISIE", com2d.x, 450);
     if (tickPlayerThread3) {
       audioPlay(2);
     }
-    break;
-  case 4: 
+    break; 
+  case 5:
+  case 6:
     // arduinoPort.write('D'); // Case 6 Blender (RF B)
     text("BLENDER", com2d.x, 450);
     if (tickPlayerThread4) {
       audioPlay(3);
-    }
-    break; 
-  case 5:
-  case 6:
-    // arduinoPort.write('E'); // Case 8 Platenspeler (RF C)
-    text("PLATENSPELER", com2d.x, 450);
-    if (tickPlayerThread5) {
-      audioPlay(4);
     }
     break;
   }
