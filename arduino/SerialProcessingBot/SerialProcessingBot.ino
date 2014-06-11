@@ -10,7 +10,7 @@
 
 
 // Seriele shit
-int val;
+char val;
 
 /*
  * Serial mapping stuff

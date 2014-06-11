@@ -35,7 +35,7 @@ void setup()
 {
   
   println(Arduino.list());
-  arduino1 = new Arduino(this, "/dev/tty.usbmodemfd141", 57600);
+  arduino1 = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
   size(640,480);
   
   // Audio Baudio
