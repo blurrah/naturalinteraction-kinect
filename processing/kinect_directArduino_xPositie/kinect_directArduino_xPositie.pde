@@ -8,7 +8,8 @@ import ddf.minim.*;
 /* Definitie componenten
  ================================================== */
 SimpleOpenNI context;
-Arduino arduino;
+Arduino arduino1;
+Arduino arduino2;
 Minim minim;
 AudioPlayer player1;
 AudioPlayer player2;
@@ -68,12 +69,13 @@ out[0] = byte(value1);
     lastTime = millis();
 
     // Arduino configuration
-    arduino = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
+    arduino1 = new Arduino(this, "/dev/tty.usbmodem1411", 57600);
+    arduino2 = new Arduino(this, "/dev/tty.usbmodem1412", 57600);
 
-    arduino.pinMode(11, Arduino.SERVO);
-    arduino.pinMode(10, Arduino.SERVO);
-    arduino.pinMode(9, Arduino.SERVO);
-    arduino.pinMode(6, Arduino.SERVO);
+    arduino1.pinMode(11, Arduino.SERVO);
+    arduino1.pinMode(10, Arduino.SERVO);
+    arduino2.pinMode(9, Arduino.SERVO);
+    arduino2.pinMode(6, Arduino.SERVO);
 
     // Audio configuration
     minim = new Minim(this);
@@ -146,10 +148,10 @@ void sendHValue(int x) {
     break;
   case 4: 
     //arduinoPort.write('B'); // Case 2 Prullenbak (PT 10)
-    arduino.servoWrite(10, 90);
-    arduino.servoWrite(11, 0);
-    arduino.servoWrite(9, 0);
-    arduino.servoWrite(6, 0);
+    arduino1.servoWrite(10, 90);
+    arduino1.servoWrite(11, 0);
+    arduino2.servoWrite(9, 0);
+    arduino2.servoWrite(6, 0);
     text("PRULLENBAK", com2d.x, 450);
     if (tickPlayerThread2) {
       audioPlay(1);
@@ -157,10 +159,10 @@ void sendHValue(int x) {
     break;
   case 3: 
     //arduinoPort.write('A'); // Case 0 Doos (PT 11)
-    arduino.servoWrite(11, 90);
-    arduino.servoWrite(10, 0);
-    arduino.servoWrite(9, 0);
-    arduino.servoWrite(6, 0);
+    arduino1.servoWrite(11, 90);
+    arduino1.servoWrite(10, 0);
+    arduino2.servoWrite(9, 0);
+    arduino2.servoWrite(6, 0);
     text("DOOS", com2d.x, 450);
     if (tickPlayerThread1) {
       audioPlay(0);
@@ -168,10 +170,10 @@ void sendHValue(int x) {
     break;
   case 2: 
     // arduinoPort.write('C'); // Case 4 Televisie (RF A)
-    arduino.servoWrite(11, 0);
-    arduino.servoWrite(10, 0);
-    arduino.servoWrite(9, 90);
-    arduino.servoWrite(6, 0);
+    arduino1.servoWrite(11, 0);
+    arduino1.servoWrite(10, 0);
+    arduino2.servoWrite(9, 90);
+    arduino2.servoWrite(6, 0);
     text("TELEVISIE", com2d.x, 450);
     if (tickPlayerThread3) {
       audioPlay(2);
@@ -180,10 +182,10 @@ void sendHValue(int x) {
   case 1:
   case 0:
     // arduinoPort.write('D'); // Case 6 Blender (RF B)
-    arduino.servoWrite(11, 0);
-    arduino.servoWrite(10, 0);
-    arduino.servoWrite(9, 0);
-    arduino.servoWrite(6, 90);
+    arduino1.servoWrite(11, 0);
+    arduino1.servoWrite(10, 0);
+    arduino2.servoWrite(9, 0);
+    arduino2.servoWrite(6, 90);
     text("BLENDER", com2d.x, 450);
     if (tickPlayerThread4) {
       audioPlay(3);
