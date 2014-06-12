@@ -81,12 +81,12 @@ out[0] = byte(value1);
 
     // Audio configuration
     minim = new Minim(this);
-    player1 = minim.loadFile("doos.wav"); // Case 0 Houten Doos
-    player2 = minim.loadFile("prullenbak.mp3"); // Case 2 Prullenbak
-    player3 = minim.loadFile("doos.wav"); // Case Doos onder houten doos
-    player4 = minim.loadFile("blender.mp3"); // Case 6 Uiteinde
-    player5 = minim.loadFile("platenspeler.wav"); // Case 8 Eerste doos
-    player6 = minim.loadfile("billieholiday.mp3");
+    player1 = minim.loadFile("doos_longbeep.wav"); // Case 0 Houten Doos
+    player2 = minim.loadFile("doos_morse.wav"); // Case 2 Prullenbak
+    player3 = minim.loadFile("doos_radiobeep.wav"); // Case Doos onder houten doos
+    player4 = minim.loadFile("uiteinde_rewind.mp3"); // Case 6 Uiteinde
+    player5 = minim.loadFile("doos_longbeep.wav"); // Case 8 Eerste doos
+    player6 = minim.loadFile("billieholiday.mp3");
 
     // Kinect configuration
     context = new SimpleOpenNI(this);
@@ -103,6 +103,10 @@ out[0] = byte(value1);
  ================================================== */
 void draw() {
   context.update();
+  if(tickPlayerThread6) {
+    audioPlay(5);
+  }
+  
   //image(context.depthImage(),0,0);
   image(context.userImage(), 0, 0);
 
@@ -293,6 +297,9 @@ void onNewUser(SimpleOpenNI curContext, int userId) {
   //println("onNewUser - userId: " + userId);
   //println("\tstart tracking skeleton");
   curContext.startTrackingSkeleton(userId);
+  if(tickPlayerThread6) {
+    audioPlay(5);
+  }
 }
 
 void onLostUser(SimpleOpenNI curContext, int userId) {
@@ -301,5 +308,8 @@ void onLostUser(SimpleOpenNI curContext, int userId) {
 
 void onVisibleUser(SimpleOpenNI curContext, int userId) {
   //println("onVisibleUser - userId: " + userId);
+  if(tickPlayerThread6) {
+    audioPlay(5);
+  }
 }
 
